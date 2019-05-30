@@ -1,17 +1,20 @@
 import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as http from 'http';
 import * as mongoose from 'mongoose';
 import { logger } from './src/logger';
 import { registerRoutes } from './src/routes';
+dotenv.config();
 
 export class App {
 
     public express: express.Application;
-    public mongoUrl: string = 'mongodb://localhost/CRMdb';
+    public mongoUrl: string = 'mongodb://localhost/nodetypescriptmongoose';
     public httpServer: http.Server;
 
-    public async init(): Promise <void> {
+    constructor() {
         this.express = express();
         this.httpServer = http.createServer(this.express);
 
@@ -31,6 +34,8 @@ export class App {
         registerRoutes(this.express);
     }
     private mongoSetup(): void {
-        mongoose.connect(this.mongoUrl);
+        mongoose.connect(this.mongoUrl, { autoIndex: false });
     }
 }
+
+export const httpServer: http.Server = new App().httpServer;

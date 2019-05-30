@@ -1,28 +1,11 @@
-import * as dotenv from 'dotenv';
-import * as http from 'http';
-import { App } from './App';
+import { httpServer } from './App';
 import { logger } from './src/logger';
+const PORT: number = Number(process.env.PORT) || 3000;
+console.log('PORT', PORT);
 
-dotenv.config();
-
-const PORT: number = 3000;
-const app: App = new App();
-let server: http.Server;
-
-//calling init functions starts server
-app.init().then(() => {
-    logger.info('called init');
-    app.express.set('port', PORT);
-    server = app.httpServer;
-    server.on('error', serverError);
-    server.on('listening', serverListening);
-    server.listen(PORT);
-}).catch((err: Error) => {
-    logger.info('app.init error');
-    logger.error(err.name);
-    logger.error(err.message);
-    logger.error(err.stack);
-});
+httpServer.on('error', serverError);
+httpServer.on('listening', serverListening);
+httpServer.listen(PORT);
 
 function serverError(error: NodeJS.ErrnoException): void {
     if (error.syscall !== 'listen') {

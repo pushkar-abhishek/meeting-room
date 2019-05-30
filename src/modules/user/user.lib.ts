@@ -50,18 +50,23 @@ export class UserLib {
     public async loginUserAndCreateToken(email: string, password: string): Promise<any> {
 
         const user: IUser = await this.getUserByEmail(email);
-        const isValidPass: boolean = await this.camparePassword(password, user.password);
-        if (isValidPass) {
-            const token: string = jwt.sign(
-                            {id: user._id},
-                            'secret',
-                            { expiresIn: '24h'},
-                        );
+        if (user !== null) {
+            const isValidPass: boolean = await this.camparePassword(password, user.password);
+            if (isValidPass) {
+                const token: string = jwt.sign(
+                                {id: user._id},
+                                'secret',
+                                { expiresIn: '24h'},
+                            );
 
-            return {user, token};
+                return {user, token};
+            } else {
+                return false;
+            }
         } else {
+            logger.info('user not found');
+
             return false;
         }
-
     }
 }

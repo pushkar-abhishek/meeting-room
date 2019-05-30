@@ -80,17 +80,17 @@ export class UserApi extends BaseCotroller {
 
     public async login(req: Request, res: Response): Promise <void> {
         try {
+            logger.info('koged callled');
             const user: UserLib = new UserLib();
             const {email, password} = req.body;
             const loggedInUser: any = await user.loginUserAndCreateToken(email, password);
-            if (loggedInUser.token) {
-                logger.info(JSON.stringify({'loggedI nUser ': loggedInUser}));
+            if (loggedInUser && loggedInUser.token) {
                 res.send(loggedInUser);
             } else {
                 res.status(401).send({message: 'Invalid login details'});
             }
         } catch (err) {
-            res.status(400).send(err);
+            res.status(400).send({err});
         }
     }
 
