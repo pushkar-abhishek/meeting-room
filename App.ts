@@ -1,26 +1,23 @@
 import * as bodyParser from 'body-parser';
-import * as cors from 'cors';
-import * as dotenv from 'dotenv';
 import * as express from 'express';
 import * as http from 'http';
 import * as mongoose from 'mongoose';
 import { logger } from './src/logger';
 import { registerRoutes } from './src/routes';
-dotenv.config();
 
 export class App {
 
     public express: express.Application;
-    public mongoUrl: string = 'mongodb://localhost/nodetypescriptmongoose';
+    public mongoUrl: string = process.env.MONGO_URL;
     public httpServer: http.Server;
 
     constructor() {
         this.express = express();
-        this.httpServer = http.createServer(this.express);
 
         this.middleware();
         this.setupRoutes();
         this.mongoSetup();
+        this.httpServer = http.createServer(this.express);
         logger.warn('logger called from app');
     }
 

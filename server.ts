@@ -1,7 +1,9 @@
-import { httpServer } from './App';
+
+import * as dotenv from 'dotenv';
 import { logger } from './src/logger';
-const PORT: number = Number(process.env.PORT) || 3000;
-console.log('PORT', PORT);
+dotenv.config();
+import { httpServer } from './App';
+const PORT: number = Number(process.env.PORT);
 
 httpServer.on('error', serverError);
 httpServer.on('listening', serverListening);
