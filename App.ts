@@ -15,8 +15,8 @@ export class App {
         this.express = express();
 
         this.middleware();
-        this.setupRoutes();
         this.mongoSetup();
+        this.setupRoutes();
         this.httpServer = http.createServer(this.express);
         logger.warn('logger called from app');
     }
@@ -31,7 +31,7 @@ export class App {
         registerRoutes(this.express);
     }
     private mongoSetup(): void {
-        mongoose.connect(this.mongoUrl, { autoIndex: false });
+        mongoose.connect(this.mongoUrl, { autoIndex: true });
     }
 }
 

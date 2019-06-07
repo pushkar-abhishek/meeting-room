@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { Messages } from './../../constants';
 import { logger } from './../../logger';
 import { userModel } from './user.model';
 import { IUser } from './user.type';
@@ -61,12 +62,10 @@ export class UserLib {
 
                 return {user, token};
             } else {
-                return false;
+                throw new Error(Messages.INVALID_CREDENTIALS);
             }
         } else {
-            logger.info('user not found');
-
-            return false;
+            throw new Error(Messages.INVALID_CREDENTIALS);
         }
     }
 }
