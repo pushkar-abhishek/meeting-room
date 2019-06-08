@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import * as request from 'supertest';
-import { App } from './../../src/App';
+import { App } from './../../App';
 import { logger } from './../../src/logger';
 let app: App;
 before(() => {

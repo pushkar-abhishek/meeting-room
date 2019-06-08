@@ -96,7 +96,6 @@ export class UserApi extends BaseCotroller {
 
     public async login(req: Request, res: Response): Promise <void> {
         try {
-            logger.info('koged callled');
             const user: UserLib = new UserLib();
             const {email, password} = req.body;
             const loggedInUser: any = await user.loginUserAndCreateToken(email, password);

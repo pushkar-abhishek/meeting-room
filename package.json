@@ -2,14 +2,13 @@
   "name": "typescript_test",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "dist/server.js",
   "scripts": {
     "test": "mocha --require ts-node/register test/**/*.ts",
     "build": "tsc -p .",
     "postinstall": "npm run build",
     "dev": "ts-node server.ts",
-    "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts",
-    "start": "node dist/Server.js"
+    "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts"
   },
   "author": "",
   "license": "ISC",

@@ -4,6 +4,7 @@ dotenv.config();
 import * as http from 'http';
 import { App } from './App';
 const PORT: number = Number(process.env.PORT);
+console.log('process.env.PORT ', process.env.PORT);
 
 const httpServer: http.Server = new App().httpServer;
 httpServer.on('error', serverError);
