@@ -6,14 +6,12 @@
   "scripts": {
     "test": "mocha --require ts-node/register test/**/*.ts",
     "build": "tsc -p .",
-    "postinstall": "npm run build",
-    "dev": "ts-node server.ts",
-    "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^3.0.3",
+    "bcrypt": "3.0.6",
     "body-parser": "^1.18.3",
     "cors": "2.8.5",
     "dotenv": "6.2.0",
@@ -25,7 +23,7 @@
     "winston": "^3.1.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^3.0.0",
+    "@types/bcrypt": "3.0.0",
     "@types/chai": "^4.1.7",
     "@types/cors": "2.8.5",
     "@types/dotenv": "6.1.1",

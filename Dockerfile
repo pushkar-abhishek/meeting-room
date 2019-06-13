@@ -1,13 +1,15 @@
-FROM node:8.9.3
+FROM node:latest
 
-WORKDIR /usr/src/app
+RUN mkdir -p /home/node/app
+
+WORKDIR /home/node/app
 
 COPY package*.json ./
 
-RUN npm install 
-
 COPY . .
+
+RUN npm install 
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

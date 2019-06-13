@@ -39,7 +39,6 @@ export class UserApi extends BaseCotroller {
 
     public async getUserById(req: Request, res: Response): Promise <void> {
         try {
-            logger.info(JSON.stringify({'user callled' : req.params}));
             const user: UserLib = new UserLib();
             const userDetails: IUser = await user.getUserById(req.params.id);
             res.locals.data = userDetails;
@@ -102,7 +101,6 @@ export class UserApi extends BaseCotroller {
             res.locals.data = loggedInUser;
             ResponseHandler.JSONSUCCESS(req, res);
         } catch (err) {
-            console.log('err', err)
             res.locals.errorCode = 401;
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'login');

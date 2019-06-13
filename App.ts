@@ -32,5 +32,3 @@ export class App {
         mongoose.connect(this.mongoUrl, { autoIndex: true });
     }
 }
-
-//export const httpServer: http.Server = new App().httpServer;
