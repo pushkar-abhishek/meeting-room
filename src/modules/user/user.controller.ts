@@ -1,8 +1,9 @@
 import { Application, Request, Response } from 'express';
 import { BaseCotroller } from '../BaseApi';
-import { ResponseHandler } from './../../helpers';
+import { AuthHelper, ResponseHandler } from './../../helpers';
 import { logger } from './../../logger';
 import { UserLib } from './user.lib';
+import { userRules } from './user.rules';
 import { IUser } from './user.type';
 
 export class UserApi extends BaseCotroller {
@@ -13,10 +14,12 @@ export class UserApi extends BaseCotroller {
     }
 
     public init(): void {
-        this.router.get('/', this.getUsers);
+        const authHelper: AuthHelper = new AuthHelper();
+
+        this.router.get('/', authHelper.guard, this.getUsers);
         this.router.get('/:id', this.getUserById);
-        this.router.post('/', this.addUser);
-        this.router.put('/:id', this.updateUser);
+        this.router.post('/sign-up', userRules.forSignUser, authHelper.validation, this.signUp);
+        this.router.put('/:id', userRules.forUpdateUser, authHelper.validation, this.updateUser);
         this.router.delete('/:id', this.deleteUser);
         this.router.post('/login', this.login);
     }
@@ -49,7 +52,7 @@ export class UserApi extends BaseCotroller {
         }
     }
 
-    public async addUser(req: Request, res: Response): Promise<void> {
+    public async signUp(req: Request, res: Response): Promise<void> {
         try {
             const user: UserLib = new UserLib();
             const userData: IUser = req.body;
@@ -67,6 +70,7 @@ export class UserApi extends BaseCotroller {
             const userId: string = req.params && req.params.id;
             logger.info(`userId ${userId}`);
             const userData: IUser = req.body;
+            delete userData.password;
             const user: UserLib = new UserLib();
             const updatedUserResult: IUser = await user.updateUser(userId, userData);
             logger.info('user updated');

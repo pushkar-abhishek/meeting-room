@@ -56,7 +56,7 @@ export class UserLib {
             if (isValidPass) {
                 const token: string = jwt.sign(
                                 {id: user._id},
-                                'secret',
+                                process.env.SECRET,
                                 { expiresIn: '24h'},
                             );
 

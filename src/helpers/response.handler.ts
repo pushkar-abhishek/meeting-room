@@ -23,47 +23,22 @@ export class ResponseHandler {
 
         let obj: IStandardErrorResponse;
         const showErrors: boolean = ['production', 'prod'].indexOf(process.env.NODE_ENV) > 0 ? false : true;
+
         const err: any = res.locals.data || {};
-        const details: any = res.locals.details ? {
-            message : res.locals.details.message,
+        const details: any = showErrors ? {
+            message : res.locals.message,
             stack : res.locals.details.stack,
-        } : null ;
-        const errorCode: number = res.locals.errorCode || HttpStatus.BAD_REQUEST;
-        if (err && err.name === 'ValidationError') {
-
-            const errors: any = {};
-
-            _.forOwn(err.errors, (value: any, key: any) => {
-                errors[key] = _.pick(value, 'message');
-            });
-            obj = {
-                success: false,
-                error: errors,
-                details: details,
-                message: err.message,
-                request: {
-                    ip: req.connection.remoteAddress,
-                    browserAgent: req.headers['user-agent'],
-                    username: (req.body && req.body.logginedUser ? req.body.logginedUser.username : ''),
-                    name: (req.body && req.body.logginedUser ? req.body.logginedUser.name : ''),
-                },
-
-            };
-
-            obj.functionName = apiName;
-            showErrors ? obj : delete obj.details;
-            res.status(errorCode).send(obj);
-        } else {
-            obj = {
-                success: false,
-                details: details,
-                error: err.error || err,
-                message: err.message || Messages.SOMETHING_BAD,
-            };
-            // error logs
-            obj.functionName = apiName;
-            showErrors ? obj : delete obj.details;
-            res.status(errorCode).send(obj);
-        }
+        } : {} ;
+        const errorCode: number = res.locals.statusCode || HttpStatus.BAD_REQUEST;
+        obj = {
+            success: false,
+            details: details,
+            error: err,
+            message: res.locals.message  || Messages.SOMETHING_BAD,
+        };
+        // error logs
+        obj.functionName = apiName;
+        showErrors ? obj : delete obj.details;
+        res.status(errorCode).send(obj);
     }
 }
