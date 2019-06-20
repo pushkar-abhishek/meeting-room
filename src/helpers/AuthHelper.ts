@@ -19,7 +19,7 @@ export class AuthHelper {
                 next();
             }
         } catch (err) {
-            res.locals.message = err.message;
+            res.locals.data.message = err.message;
             res.locals.details = err;
             res.locals.name = 'ValidationError';
             ResponseHandler.JSONERROR(req, res, 'validation');

@@ -3,6 +3,15 @@ import { check } from 'express-validator/check';
 
 export const userRules: any = {
 
+    forSignIn: [
+        check('email')
+        .not().isEmpty().withMessage('Please enter email address')
+        .isEmail().withMessage('Invalid email address'),
+
+        check('password')
+        .not().isEmpty().withMessage('Please enter password')
+        .isLength({min: 8}).withMessage('Password should be greater than 8 char'),
+    ],
     forSignUser: [
         check('email')
         .not().isEmpty().withMessage('Please enter email address')

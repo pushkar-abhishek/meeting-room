@@ -24,17 +24,11 @@ export class ResponseHandler {
         let obj: IStandardErrorResponse;
         const showErrors: boolean = ['production', 'prod'].indexOf(process.env.NODE_ENV) > 0 ? false : true;
 
-        const err: any = res.locals.data || {};
-        const details: any = showErrors ? {
-            message : res.locals.message,
-            stack : res.locals.details.stack,
-        } : {} ;
         const errorCode: number = res.locals.statusCode || HttpStatus.BAD_REQUEST;
         obj = {
             success: false,
-            details: details,
-            error: err,
-            message: res.locals.message  || Messages.SOMETHING_BAD,
+            details: res.locals.data,
+            message: res.locals.data.message  || Messages.SOMETHING_BAD,
         };
         // error logs
         obj.functionName = apiName;
