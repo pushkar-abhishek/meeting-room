@@ -41,7 +41,6 @@ export class AuthHelper {
                 throw new Error(Messages.INVALID_CREDENTIALS);
             }
         } catch (err) {
-            res.locals.details = err;
             res.locals.data = err;
             res.locals.message = 'AuthenticationError';
             res.locals.statusCode = HttpStatus.UNAUTHORIZED ;

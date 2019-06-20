@@ -105,7 +105,6 @@ export class UserApi extends BaseCotroller {
             res.locals.data = loggedInUser;
             ResponseHandler.JSONSUCCESS(req, res);
         } catch (err) {
-            console.log('err', err)
             res.locals.errorCode = 401;
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'login');

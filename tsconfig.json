@@ -2,7 +2,7 @@
     "compilerOptions": {
         "module": "commonjs",
         "moduleResolution": "node",
-        "pretty": true,
+        "pretty": false,
         "target": "es6",
         "sourceMap": false,
         "noImplicitAny": true,
