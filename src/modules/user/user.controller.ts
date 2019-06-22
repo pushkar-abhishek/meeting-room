@@ -1,12 +1,13 @@
 import { Application, Request, Response } from 'express';
-import { BaseCotroller } from '../BaseApi';
-import { AuthHelper, ResponseHandler } from './../../helpers';
+import { PaginateResult } from 'mongoose';
+import { BaseCotroller } from '../BaseController';
+import { AuthHelper, ResponseHandler, Utils } from './../../helpers';
 import { logger } from './../../logger';
 import { UserLib } from './user.lib';
 import { userRules } from './user.rules';
 import { IUser } from './user.type';
 
-export class UserApi extends BaseCotroller {
+export class UserController extends BaseCotroller {
 
     constructor() {
         super();
@@ -18,10 +19,8 @@ export class UserApi extends BaseCotroller {
 
         this.router.get('/', authHelper.guard, this.getUsers);
         this.router.get('/:id', this.getUserById);
-        this.router.post('/sign-up', userRules.forSignUser, authHelper.validation, this.signUp);
         this.router.put('/:id', userRules.forUpdateUser, authHelper.validation, this.updateUser);
         this.router.delete('/:id', this.deleteUser);
-        this.router.post('/login', userRules.forSignIn, authHelper.validation, this.login);
     }
 
     public register(app: Application) : void {
@@ -30,9 +29,18 @@ export class UserApi extends BaseCotroller {
 
     public async getUsers(req: Request, res: Response): Promise<void> {
         try {
+            const utils: Utils = new Utils();
+            const filters: any = {};
+            const select: string = '-password';
+
+            const options: any = {
+                page: req.query.page ? Number(req.query.page) : 1,
+                limit: req.query.limit ? Number(req.query.limit) : 2,
+            };
             const user: UserLib = new UserLib();
-            const users: IUser[] = await user.getUsers();
-            res.locals.data = users;
+            const users: PaginateResult<IUser> = await user.getUsers(filters, select, options);
+            res.locals.data = users.docs;
+            res.locals.pagination = utils.getPaginateResponse(users);
             ResponseHandler.JSONSUCCESS(req, res);
         } catch (err) {
             res.locals.data = err;
@@ -49,19 +57,6 @@ export class UserApi extends BaseCotroller {
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'getUserById');
-        }
-    }
-
-    public async signUp(req: Request, res: Response): Promise<void> {
-        try {
-            const user: UserLib = new UserLib();
-            const userData: IUser = req.body;
-            const userResult: IUser = await user.saveUser(userData);
-            res.locals.data = userResult;
-            ResponseHandler.JSONSUCCESS(req, res);
-        } catch (err) {
-            res.locals.data = err;
-            ResponseHandler.JSONERROR(req, res, 'addUser');
         }
     }
 
@@ -96,19 +91,4 @@ export class UserApi extends BaseCotroller {
             ResponseHandler.JSONERROR(req, res, 'deleteUser');
         }
     }
-
-    public async login(req: Request, res: Response): Promise <void> {
-        try {
-            const user: UserLib = new UserLib();
-            const {email, password} = req.body;
-            const loggedInUser: any = await user.loginUserAndCreateToken(email, password);
-            res.locals.data = loggedInUser;
-            ResponseHandler.JSONSUCCESS(req, res);
-        } catch (err) {
-            res.locals.errorCode = 401;
-            res.locals.data = err;
-            ResponseHandler.JSONERROR(req, res, 'login');
-        }
-    }
-
 }

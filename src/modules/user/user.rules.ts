@@ -25,6 +25,12 @@ export const userRules: any = {
         .not().isEmpty().withMessage('Please enter confirm password')
         .custom((value: string, options : { req: Request }) => value === options.req.body.password)
         .withMessage('Password and Confirm password are not same.'),
+
+        check('first_name')
+        .not().isEmpty().withMessage('Please enter first name'),
+
+        check('gender')
+        .not().isEmpty().withMessage('Please select gender'),
     ],
 
     forUpdateUser: [

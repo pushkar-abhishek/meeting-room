@@ -33,6 +33,7 @@ export class AuthHelper {
             if (token) {
                 const auth: any = jwt.verify(token, process.env.SECRET);
                 if (auth) {
+                    req.body.loggedinUserId = auth.id;
                     next();
                 } else {
                     throw new Error(Messages.INVALID_CREDENTIALS);

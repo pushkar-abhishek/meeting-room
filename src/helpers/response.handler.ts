@@ -38,10 +38,12 @@ export class ResponseHandler {
             message = res.locals.data._message;
         } else {
             // validation error
-            res.locals.data.map((data: any) => {
-                data.location = undefined;
-            });
-            details = res.locals.data;
+            if (res.locals.data.length) {
+                res.locals.data.map((data: any) => {
+                    data.location = undefined;
+                });
+                details = res.locals.data;
+            }
         }
         const errorCode: number = res.locals.statusCode || HttpStatus.BAD_REQUEST;
         obj = {

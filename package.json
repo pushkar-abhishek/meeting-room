@@ -26,6 +26,7 @@
     "jsonwebtoken": "^8.4.0",
     "lodash": "4.17.11",
     "mongoose": "^5.4.3",
+    "mongoose-paginate": "5.0.3",
     "winston": "^3.1.0"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "@types/lodash": "4.14.134",
     "@types/mocha": "^5.2.5",
     "@types/mongoose": "^5.3.7",
+    "@types/mongoose-paginate": "5.0.6",
     "@types/supertest": "^2.0.7",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",

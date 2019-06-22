@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
+import { PaginateResult } from 'mongoose';
 import { Messages } from './../../constants';
 import { logger } from './../../logger';
 import { userModel } from './user.model';
@@ -17,8 +18,9 @@ export class UserLib {
         return bcrypt.compareSync(password, hash);
     }
 
-    public async getUsers(): Promise<IUser[]> {
-        return userModel.find();
+    public async getUsers(filters: any, projecton: any, options: any): Promise<PaginateResult<IUser>> {
+        //return userModel.find(filters, projecton, options);
+        return userModel.paginate(filters, options);
     }
 
     public async getUserById(id: string): Promise<IUser> {
