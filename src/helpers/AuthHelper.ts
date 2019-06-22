@@ -28,7 +28,6 @@ export class AuthHelper {
 
     public async guard(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
-
             const token: string = req.headers.authorization || req.query.token;
             if (token) {
                 const auth: any = jwt.verify(token, process.env.SECRET);

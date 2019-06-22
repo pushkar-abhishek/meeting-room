@@ -18,8 +18,8 @@ export class UserController extends BaseCotroller {
         const authHelper: AuthHelper = new AuthHelper();
 
         this.router.get('/', authHelper.guard, this.getUsers);
-        this.router.get('/:id', this.getUserById);
-        this.router.put('/:id', userRules.forUpdateUser, authHelper.validation, this.updateUser);
+        this.router.get('/:id', authHelper.guard, this.getUserById);
+        this.router.put('/:id', authHelper.guard, userRules.forUpdateUser, authHelper.validation, this.updateUser);
         this.router.delete('/:id', this.deleteUser);
     }
 
@@ -63,7 +63,9 @@ export class UserController extends BaseCotroller {
     public async updateUser(req: Request, res: Response): Promise<void> {
         try {
             const userId: string = req.params && req.params.id;
-            logger.info(`userId ${userId}`);
+            if (userId !== req.body.loggedinUserId) {
+                throw new Error('You are not owner to update details');
+            }
             const userData: IUser = req.body;
             delete userData.password;
             const user: UserLib = new UserLib();
@@ -79,6 +81,7 @@ export class UserController extends BaseCotroller {
 
     public async deleteUser(req: Request, res: Response): Promise<any> {
         try {
+            throw new Error('Not Allowed now');
             const user: UserLib = new UserLib();
             logger.info(`id ${req.params.id}`);
             logger.info('delete');
