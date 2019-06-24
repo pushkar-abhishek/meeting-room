@@ -1,4 +1,5 @@
 import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
 import * as express from 'express';
 import * as http from 'http';
 import * as mongoose from 'mongoose';
@@ -21,6 +22,7 @@ export class App {
 
     private middleware(): void {
 
+        this.express.use(cors());
         this.express.use(bodyParser.json());
         this.express.use(bodyParser.urlencoded({ extended: true }));
     }
