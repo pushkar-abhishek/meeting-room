@@ -1,6 +1,6 @@
 import { Application, Request, Response} from 'express';
 import { BaseCotroller } from '../BaseController';
-import { AuthHelper, EmailServer, ResponseHandler } from './../../helpers';
+import { AuthHelper, EmailServer, ResponseHandler, Utils } from './../../helpers';
 import { UserLib } from './../user/user.lib';
 import { userRules } from './../user/user.rules';
 import { IUser } from './../user/user.type';
@@ -54,12 +54,34 @@ export class AuthController extends BaseCotroller {
         try {
 
             const user: UserLib = new UserLib();
-            const email: string = req.body.email ? req.body.email : null;
-            const userData: IUser = await user.getUserByEmail(email);
             const mailer: EmailServer = new EmailServer();
-            res.locals.data = userData;
-            mailer.sendEmail({ to: 'sandip.ghadge@wwindia.com'});
+            const utils: Utils = new Utils();
+
+            const email: string = req.body.email ? req.body.email : null;
+            const tmpForgotPassCode: string = await utils.getToken();
+            const userData: IUser = await user.getUserByEmail(email);
+            await user.updateUser(userData._id, {tmp_forgot_pass_code: tmpForgotPassCode});
+            const options: any = {
+                subject: 'Forgot Password',
+                templateName: 'password-reset',
+                to: userData.email,
+                replace: {
+                    code: '1234',
+                },
+            };
+            mailer.sendEmail(options);
             ResponseHandler.JSONSUCCESS(req, res);
+        } catch (err) {
+            res.locals.data = err;
+            ResponseHandler.JSONERROR(req, res, 'forgotPasword');
+        }
+    }
+
+    public async resetPassword (req: Request, res: Response): Promise<void> {
+        try {
+            const user: UserLib = new UserLib();
+            const mailer: EmailServer = new EmailServer();
+
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'forgotPasword');

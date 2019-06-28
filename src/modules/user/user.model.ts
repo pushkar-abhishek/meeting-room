@@ -23,6 +23,9 @@ export const userSchema: Schema = new Schema(
             type: String,
             enum: ['Male', 'Female'],
         },
+        tmp_forgot_pass_code: {
+            type: String,
+        },
     },
     {
         timestamps: true,

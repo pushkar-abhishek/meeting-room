@@ -8,3 +8,13 @@ export interface IUser extends Document {
     created_date?: Date;
     token?: string;
 }
+
+export interface IUserRequest {
+    password? : string;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    created_date?: Date;
+    token?: string;
+    tmp_forgot_pass_code?: string;
+}

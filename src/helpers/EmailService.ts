@@ -1,30 +1,41 @@
 
 import * as mailer from 'nodemailer';
+import * as Mail from 'nodemailer/lib/mailer';
+import * as pug from 'pug';
 
 export class EmailServer {
 
-    public async sendEmail(options: any): Promise<boolean> {
+    public async sendEmail(options: any): Promise<any> {
 
         const transporter: any = mailer.createTransport({
             host: process.env.EMAIL_HOST,
-            port: 465,
-            secure: true, // true for 465, false for other ports
+            port: Number(process.env.EMAIL_HOST),
+            secure: Boolean(process.env.SECURE), // true for 465, false for other ports
             auth: {
               user: process.env.EMAIL_USERNAME, // generated ethereal user
               pass: process.env.EMAIL_PASS, // generated ethereal password
             },
         });
 
-        const info: any = await transporter.sendMail({
-            from: '"Fred Foo 👻" <foo@example.com>', // sender address
-            to: options.to, // list of receivers
-            subject: 'Forgot Password ✔', // Subject line
-            text: 'Hello world?', // plain text body
-            html: '<b>Hello world?</b>', // html body
-        });
+        const mailOptions: Mail.Options = {
+            from: process.env.EMAIL_FROM,
+            to: options.to,
+            subject: options.subject,
+        };
 
-        console.log('Message sent: %s', info.messageId);
+        if (options.templateName) {
+            mailOptions.html = await this.getTemplate(options.templateName, options.replace);
+        }
 
-        return true;
+        const info: any  = await transporter.sendMail(mailOptions);
+    }
+
+    /**
+     *
+     * @param templateName
+     */
+    private async getTemplate(templateName : string, options: object = {}): Promise<string> {
+        return pug.renderFile(`${__dirname}/../../views/email-templates/${templateName}.pug`, options);
+
     }
 }

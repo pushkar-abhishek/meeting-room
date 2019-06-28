@@ -4,7 +4,7 @@ import { PaginateResult } from 'mongoose';
 import { Messages } from './../../constants';
 import { logger } from './../../logger';
 import { userModel } from './user.model';
-import { IUser } from './user.type';
+import { IUser, IUserRequest } from './user.type';
 
 export class UserLib {
 
@@ -38,7 +38,7 @@ export class UserLib {
         return userModel.findOne({email: email});
     }
 
-    public async updateUser(userId: string, userData: IUser): Promise<IUser> {
+    public async updateUser(userId: string, userData: IUserRequest): Promise<IUser> {
         const user: IUser = await userModel.findById(userId);
         user.set(userData);
 
