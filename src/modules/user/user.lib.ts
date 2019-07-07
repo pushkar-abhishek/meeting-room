@@ -61,6 +61,7 @@ export class UserLib {
                                 process.env.SECRET,
                                 { expiresIn: '24h'},
                             );
+                user.password = undefined;
 
                 return {user, token};
             } else {
