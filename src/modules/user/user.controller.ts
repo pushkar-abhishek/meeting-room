@@ -17,7 +17,7 @@ export class UserController extends BaseCotroller {
     public init(): void {
         const authHelper: AuthHelper = new AuthHelper();
 
-        this.router.get('/', authHelper.guard, this.getUsers);
+        this.router.get('/',  this.getUsers);
         this.router.get('/:id', authHelper.guard, this.getUserById);
         this.router.put('/:id', authHelper.guard, userRules.forUpdateUser, authHelper.validation, this.updateUser);
         this.router.delete('/:id', this.deleteUser);

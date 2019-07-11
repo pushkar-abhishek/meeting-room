@@ -1,26 +1,32 @@
 import { expect } from 'chai';
+import * as dotenv from 'dotenv';
+import * as http from 'http';
 import * as request from 'supertest';
 import { App } from './../../App';
 import { logger } from './../../src/logger';
-let app: App;
-before(() => {
-  app = new App();
-});
 
+dotenv.config();
+
+let app: http.Server;
+before(() => {
+  app = new App().httpServer;
+  app.on('error', function(): void {
+    console.log('testing server ');
+  });
+  app.on('listening', function(): void {
+    console.log('testing server started');
+  });
+  app.listen(process.env.PORT);
+});
 describe('User module', () => {
 
   describe('"usercontroller.getUsers()"', () => {
 
     it('should should list users', async () => {
 
-        const options: object = {
-          url: 'localhost:3000/api/',
-          resolveWithFullResponse: true,
-        };
-
         try {
           const users: any = await request(app)
-            .get('/users');
+            .get('/api/users');
 
           logger.info(JSON.stringify({'jso data': users}));
         } catch (err) {

@@ -9,7 +9,7 @@
     "postinstall": "npm run build-ts",
     "start": "npm run serve",
     "serve": "node dist/server.js",
-    "watch-node": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts",
+    "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts",
     "prod": "nodemon dist/server.js"
   },
   "engines": {
