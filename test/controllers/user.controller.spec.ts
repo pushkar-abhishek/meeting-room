@@ -5,19 +5,23 @@ import * as request from 'supertest';
 import { App } from './../../App';
 import { logger } from './../../src/logger';
 
-dotenv.config();
+dotenv.config({
+  path: '.env.test',
+});
 
 let app: http.Server;
 before(() => {
   app = new App().httpServer;
   app.on('error', function(): void {
-    console.log('testing server ');
+    logger.log('testing server ');
   });
   app.on('listening', function(): void {
-    console.log('testing server started');
+    logger.info('testing server started');
   });
   app.listen(process.env.PORT);
 });
+console.log('env : ', process.env.PORT);
+
 describe('User module', () => {
 
   describe('"usercontroller.getUsers()"', () => {
@@ -30,6 +34,7 @@ describe('User module', () => {
 
           logger.info(JSON.stringify({'jso data': users}));
         } catch (err) {
+            logger.log('err: ::', err)
             expect(err.statusCode).to.be.equal(401); // this is called
         }
     });
