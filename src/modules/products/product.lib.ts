@@ -16,4 +16,18 @@ export class ProductLib {
         return productObj.save();
     }
 
+    public async getCategoryWiseProduct(): Promise<any> {
+
+        return productModel.aggregate([
+            {
+                $lookup: {
+                    from: 'categories', //collection name not a model name
+                    localField: 'category_id',
+                    foreignField: '_id',
+                    as: 'category_products',
+                },
+            },
+        ]);
+    }
+
 }

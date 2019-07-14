@@ -4,6 +4,7 @@ import { BaseCotroller } from '../BaseController';
 import { AuthHelper, ResponseHandler, Utils } from './../../helpers';
 import { ProductLib } from './product.lib';
 import { IProduct } from './product.type';
+import { CategoryLib } from './../category/category.lib';
 
 export class ProductController extends BaseCotroller {
 
@@ -20,6 +21,7 @@ export class ProductController extends BaseCotroller {
         const authHelper: AuthHelper = new AuthHelper();
         this.router.get('/', this.getProducts);
         this.router.post('/', authHelper.validation, this.addProduct);
+        this.router.get('/home-list', this.getHomeList)
     }
 
     public async getProducts(req: Request, res: Response): Promise<void> {
@@ -59,6 +61,34 @@ export class ProductController extends BaseCotroller {
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'addProduct');
+        }
+    }
+
+    /**
+     * getHomeProductList
+     * @param req
+     * @param res
+     */
+    public async getHomeList(req: Request, res: Response): Promise<void> {
+
+        // try {
+        //     const user: ProductLib = new ProductLib();
+        //     const users: any = await user.getCategoryWiseProduct();
+        //     res.locals.data = users;
+        //     ResponseHandler.JSONSUCCESS(req, res);
+        // } catch (err) {
+        //     res.locals.data = err;
+        //     ResponseHandler.JSONERROR(req, res, 'getProducts');
+        // }
+
+        try {
+            const categoryLib: CategoryLib = new CategoryLib();
+            const categoies: any = await categoryLib.getCategoryWiseProduct();
+            res.locals.data = categoies;
+            ResponseHandler.JSONSUCCESS(req, res);
+        } catch (err) {
+            res.locals.data = err;
+            ResponseHandler.JSONERROR(req, res, 'getProducts');
         }
     }
 }

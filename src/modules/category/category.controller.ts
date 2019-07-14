@@ -23,6 +23,7 @@ export class CategoryController extends BaseCotroller {
         this.router.get('/', authHelper.guard, this.listCategories);
         this.router.get('/:id', authHelper.guard, this.getCategory);
         this.router.post('/', authHelper.guard, categoryRule.forAdd, authHelper.validation, this.addCategory);
+        this.router.get('/dashboard-products', this.getHomeList);
     }
 
     public async listCategories(req: Request, res: Response): Promise<void> {
@@ -64,6 +65,24 @@ export class CategoryController extends BaseCotroller {
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'listCategories');
+        }
+    }
+
+    /**
+     * getHomeProductList
+     * @param req
+     * @param res
+     */
+    public async getHomeList(req: Request, res: Response): Promise<void> {
+
+        try {
+            const categoryLib: CategoryLib = new CategoryLib();
+            const categoryProducts: any = await categoryLib.getCategoryWiseProduct();
+            res.locals.data = categoryProducts;
+            ResponseHandler.JSONSUCCESS(req, res);
+        } catch (err) {
+            res.locals.data = err;
+            ResponseHandler.JSONERROR(req, res, 'getProducts');
         }
     }
 }
