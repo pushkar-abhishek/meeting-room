@@ -5,6 +5,9 @@ import { UserLib } from './../user/user.lib';
 import { userRules } from './../user/user.rules';
 import { IUser } from './../user/user.type';
 
+/**
+ * AuthController
+ */
 export class AuthController extends BaseCotroller {
 
     constructor() {
@@ -69,7 +72,7 @@ export class AuthController extends BaseCotroller {
                     code: '1234',
                 },
             };
-            mailer.sendEmail(options);
+            mailer.sendEmail(options).then().catch();
             ResponseHandler.JSONSUCCESS(req, res);
         } catch (err) {
             res.locals.data = err;

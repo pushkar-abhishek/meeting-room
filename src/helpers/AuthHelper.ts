@@ -6,6 +6,9 @@ import { Messages } from './../constants/messages';
 import { logger } from './../logger';
 import { ResponseHandler } from './response.handler';
 
+/**
+ * AuthHelper
+ */
 export class AuthHelper {
 
      public async validation(req: Request, res: Response, next: NextFunction): Promise <void> {

@@ -11,7 +11,8 @@
     "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts",
     "prod": "nodemon dist/server.js",
     "test": "mocha --require ts-node/register test/**/*.ts",
-    "lint": "npm run tslint \"Client/**/*.ts\"",
+    "tslint": "tslint --project tsconfig.json",
+    "lint": "npm run tslint \"src/**/*.ts\"",
     "precommit": "npm run lint && npm test",
     "prepush": "npm run lint"
   },

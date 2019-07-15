@@ -2,6 +2,9 @@ import * as crypto from 'crypto';
 import { PaginateResult } from 'mongoose';
 import { IPagination } from '../abstractions/ApiResponses';
 
+/**
+ * Utils
+ */
 export class Utils {
 
     public getPaginateResponse<T>(response: PaginateResult<T>): IPagination {
@@ -15,7 +18,7 @@ export class Utils {
     }
 
     public async getToken(): Promise<string> {
-        const buffer: Buffer = await crypto.randomBytes(16);
+        const buffer: Buffer = crypto.randomBytes(16);
 
         return buffer.toString('hex');
     }

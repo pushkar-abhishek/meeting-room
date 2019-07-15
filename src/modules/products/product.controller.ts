@@ -2,10 +2,14 @@ import { Application, Request, Response} from 'express';
 import { PaginateResult } from 'mongoose';
 import { BaseCotroller } from '../BaseController';
 import { AuthHelper, ResponseHandler, Utils } from './../../helpers';
+import { CategoryLib } from './../category/category.lib';
 import { ProductLib } from './product.lib';
 import { IProduct } from './product.type';
-import { CategoryLib } from './../category/category.lib';
 
+/**
+ * ProductController
+ *
+ */
 export class ProductController extends BaseCotroller {
 
     constructor() {
@@ -21,7 +25,7 @@ export class ProductController extends BaseCotroller {
         const authHelper: AuthHelper = new AuthHelper();
         this.router.get('/', this.getProducts);
         this.router.post('/', authHelper.validation, this.addProduct);
-        this.router.get('/home-list', this.getHomeList)
+        this.router.get('/home-list', this.getHomeList);
     }
 
     public async getProducts(req: Request, res: Response): Promise<void> {

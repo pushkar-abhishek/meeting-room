@@ -7,6 +7,9 @@ import { UserLib } from './user.lib';
 import { userRules } from './user.rules';
 import { IUser } from './user.type';
 
+/**
+ * UserController
+ */
 export class UserController extends BaseCotroller {
 
     constructor() {

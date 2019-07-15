@@ -6,6 +6,10 @@ import { logger } from './../../logger';
 import { userModel } from './user.model';
 import { IUser, IUserRequest } from './user.type';
 
+/**
+ * UserLib
+ *
+ */
 export class UserLib {
 
     public async generateHash(password: string): Promise<string> {
@@ -38,7 +42,12 @@ export class UserLib {
         return userModel.findOne({email: email});
     }
 
-    public async updateUser(userId: string, userData: IUserRequest): Promise<IUser> {
+    /**
+     * updateUser
+     * @param userId
+     * @param userData
+     */
+    public async updateUser(userId: string, userData: IUserRequest): Promise<any> {
         const user: IUser = await userModel.findById(userId);
         user.set(userData);
 

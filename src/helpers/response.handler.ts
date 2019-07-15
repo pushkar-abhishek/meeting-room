@@ -4,6 +4,9 @@ import * as _ from 'lodash';
 import { IStandardErrorResponse, IStandardSuccessResponse } from '../abstractions/ApiResponses';
 import { Messages } from '../constants';
 
+/**
+ * ResponseHandler
+ */
 // tslint:disable-next-line:no-unnecessary-class
 export class ResponseHandler {
 

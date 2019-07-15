@@ -5,6 +5,9 @@ import { CategoryLib } from './category.lib';
 import { categoryRule } from './category.rule';
 import { ICategory } from './category.type';
 
+/**
+ * CategoryController
+ */
 export class CategoryController extends BaseCotroller {
 
     constructor () {

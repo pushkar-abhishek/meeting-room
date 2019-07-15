@@ -1,7 +1,9 @@
 import { categoryModel } from './category.model';
 import { ICategory } from './category.type';
-import { ProductHelper } from '../../helpers/ProductHelper';
 
+/**
+ * CategoryLib
+ */
 export class CategoryLib {
 
     public async getAllCategories(): Promise<ICategory[]> {
@@ -23,7 +25,7 @@ export class CategoryLib {
 
     public async getCategoryWiseProduct(): Promise<any> {
 
-        let data = await  categoryModel.aggregate([
+        return categoryModel.aggregate([
             {
                 $lookup: {
                     from: 'products', //collection name not a model name
@@ -38,21 +40,6 @@ export class CategoryLib {
                     },
                 },
             },
-            {
-                
-            }
         ]);
-
-
-        data.forEach((el) => {
-            let category_products : Array<any> = []
-            let bset = ProductHelper.findUnique(el.category_products);
-            bset.forEach((s) => {
-                category_products.push(el.category_products.find((d :any) => d && d.brand == s))
-            })
-            el.category_products = category_products;
-        })
-
-        return data;
     }
 }
