@@ -11,15 +11,13 @@
     "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts",
     "prod": "nodemon dist/server.js",
     "test": "mocha --require ts-node/register test/**/*.ts",
-    "tslint": "tslint --project tsconfig.json",
-    "lint": "npm run tslint \"src/**/*.ts\"",
-    "precommit": "npm run lint && npm test",
-    "prepush": "npm run lint"
+    "lint": "tslint -p tsconfig.json -c tslint.json"
   },
+
   "engines": {
     "node": "8.9.3"
   },
-  "author": "",
+  "author": "Sandip Ghadge",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "3.0.6",
