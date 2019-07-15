@@ -10,7 +10,8 @@
     "start": "npm run serve",
     "serve": "node dist/server.js",
     "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts",
-    "prod": "nodemon dist/server.js"
+    "prod": "nodemon dist/server.js",
+    "tslint": "tslint --project tsconfig.json"
   },
   "engines": {
     "node": "8.9.3"
@@ -48,6 +49,7 @@
     "@types/pug": "2.0.4",
     "@types/supertest": "^2.0.7",
     "chai": "^4.2.0",
+    "husky": "3.0.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.9",
     "supertest": "^3.4.1",
