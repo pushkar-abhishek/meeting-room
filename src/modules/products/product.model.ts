@@ -139,6 +139,10 @@ export const productSchema: Schema = new Schema(
         memory_storage: memoryStorageSchema,
         camera: cameraSchema,
         connectivity_feature: connectivitySchema,
+        isDelete: {
+            type: Boolean,
+            default: false,
+        },
     },
 );
 

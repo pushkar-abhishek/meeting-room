@@ -1,6 +1,7 @@
 import { Application, Request, Response} from 'express';
+import { Types } from 'mongoose';
 import { AuthHelper, ResponseHandler } from '../../helpers';
-import { BaseCotroller } from '../BaseController';
+import { BaseController } from '../BaseController';
 import { CategoryLib } from './category.lib';
 import { categoryRule } from './category.rule';
 import { ICategory } from './category.type';
@@ -8,7 +9,7 @@ import { ICategory } from './category.type';
 /**
  * CategoryController
  */
-export class CategoryController extends BaseCotroller {
+export class CategoryController extends BaseController {
 
     constructor () {
         super();
@@ -23,8 +24,10 @@ export class CategoryController extends BaseCotroller {
     public init(): void {
         const authHelper: AuthHelper = new AuthHelper();
 
-        this.router.get('/', authHelper.guard, this.listCategories);
-        this.router.get('/:id', authHelper.guard, this.getCategory);
+        this.router.get('/', this.listCategories);
+        this.router.get('/:id', this.getCategory);
+        this.router.put('/:id', authHelper.guard, this.updateCategory);
+        this.router.delete('/:id', authHelper.guard, this.deleteCategory);
         this.router.post('/', authHelper.guard, categoryRule.forAdd, authHelper.validation, this.addCategory);
         this.router.get('/dashboard-products', this.getHomeList);
     }
@@ -32,8 +35,8 @@ export class CategoryController extends BaseCotroller {
     public async listCategories(req: Request, res: Response): Promise<void> {
 
         try {
-            const categooryLib: CategoryLib = new CategoryLib();
-            const categories: ICategory[] = await categooryLib.getAllCategories();
+            const categoryLib: CategoryLib = new CategoryLib();
+            const categories: ICategory[] = await categoryLib.getAllCategories();
             res.locals.data = categories;
             ResponseHandler.JSONSUCCESS(req, res);
         } catch (err) {
@@ -45,8 +48,8 @@ export class CategoryController extends BaseCotroller {
     public async getCategory(req: Request, res: Response): Promise<void> {
 
         try {
-            const categooryLib: CategoryLib = new CategoryLib();
-            const category: ICategory = await categooryLib.getCategoryById(req.params.id);
+            const categoryLib: CategoryLib = new CategoryLib();
+            const category: ICategory = await categoryLib.getCategoryById(req.params.id);
             if (!category) {
                 throw Error('Invalid category id passed');
             }
@@ -61,8 +64,8 @@ export class CategoryController extends BaseCotroller {
     public async addCategory(req: Request, res: Response): Promise<void> {
 
         try {
-            const categooryLib: CategoryLib = new CategoryLib();
-            const category: ICategory = await categooryLib.addCategory(req.body);
+            const categoryLib: CategoryLib = new CategoryLib();
+            const category: ICategory = await categoryLib.addCategory(req.body);
             res.locals.data = category;
             ResponseHandler.JSONSUCCESS(req, res);
         } catch (err) {
@@ -86,6 +89,42 @@ export class CategoryController extends BaseCotroller {
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'getProducts');
+        }
+    }
+
+    /**
+     * Update Category by id
+     * @param req
+     * @param res
+     */
+    public async updateCategory(req: Request, res: Response): Promise<void> {
+        const body: ICategory = req.body;
+        const id: Types.ObjectId = req.params.id;
+        try {
+            const category: any = await new CategoryLib().findByIdAndUpdate(id, body);
+            res.locals.data = category;
+            ResponseHandler.JSONSUCCESS(req, res);
+        } catch (err) {
+            res.locals.data = err;
+            ResponseHandler.JSONERROR(req, res, 'updateCategory');
+        }
+    }
+
+    /**
+     * Delete Category by id
+     * @param req
+     * @param res
+     */
+    public async deleteCategory(req: Request, res: Response): Promise<void> {
+        const id: Types.ObjectId = req.params.id;
+        try {
+            const data: any = { isDelete: true };
+            const deletedCategory: any = await new CategoryLib().findByIdAndUpdate(id, data);
+            res.locals.data = deletedCategory;
+            ResponseHandler.JSONSUCCESS(req, res);
+        } catch (err) {
+            res.locals.data = err;
+            ResponseHandler.JSONERROR(req, res, 'deleteCategory');
         }
     }
 }

@@ -45,6 +45,7 @@ export class App {
         registerRoutes(this.express);
     }
     private mongoSetup(): void {
-        mongoose.connect(this.mongoUrl, { autoIndex: true });
+        mongoose.set('debug', true);
+        mongoose.connect(this.mongoUrl, { autoIndex: true, useNewUrlParser: true, useCreateIndex: true });
     }
 }

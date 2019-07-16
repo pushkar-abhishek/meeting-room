@@ -10,7 +10,8 @@ export interface IProduct extends Document {
     warranty?: string;
     general?: any;
     display_feature?: any;
-    memory_storage: any;
-    camera: any;
-    connectivity_feature: any;
+    memory_storage?: any;
+    camera?: any;
+    connectivity_feature?: any;
+    idDelete: Boolean;
 }

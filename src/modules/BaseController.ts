@@ -1,9 +1,9 @@
 import {Application, Router } from 'express';
 
 /**
- * BaseCotroller
+ * BaseController
  */
-export abstract class BaseCotroller {
+export abstract class BaseController {
 
     protected router: Router;
     protected constructor() {

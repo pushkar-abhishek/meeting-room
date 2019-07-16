@@ -17,13 +17,13 @@ export class UserLib {
         return bcrypt.hashSync(password, 10);
     }
 
-    public async camparePassword(password: string, hash: string): Promise<boolean> {
+    public async comparePassword(password: string, hash: string): Promise<boolean> {
 
         return bcrypt.compareSync(password, hash);
     }
 
-    public async getUsers(filters: any, projecton: any, options: any): Promise<PaginateResult<IUser>> {
-        //return userModel.find(filters, projecton, options);
+    public async getUsers(filters: any, projection: any, options: any): Promise<PaginateResult<IUser>> {
+        //return userModel.find(filters, projection, options);
         return userModel.paginate(filters, options);
     }
 
@@ -63,7 +63,7 @@ export class UserLib {
 
         const user: IUser = await this.getUserByEmail(email);
         if (user !== null) {
-            const isValidPass: boolean = await this.camparePassword(password, user.password);
+            const isValidPass: boolean = await this.comparePassword(password, user.password);
             if (isValidPass) {
                 const token: string = jwt.sign(
                                 {id: user._id},

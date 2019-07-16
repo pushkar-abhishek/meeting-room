@@ -1,5 +1,5 @@
 import { Application, Request, Response} from 'express';
-import { BaseCotroller } from '../BaseController';
+import { BaseController } from '../BaseController';
 import { AuthHelper, EmailServer, ResponseHandler, Utils } from './../../helpers';
 import { UserLib } from './../user/user.lib';
 import { userRules } from './../user/user.rules';
@@ -8,7 +8,7 @@ import { IUser } from './../user/user.type';
 /**
  * AuthController
  */
-export class AuthController extends BaseCotroller {
+export class AuthController extends BaseController {
 
     constructor() {
         super();
@@ -23,7 +23,7 @@ export class AuthController extends BaseCotroller {
         const authHelper: AuthHelper = new AuthHelper();
         this.router.post('/sign-up', userRules.forSignUser, authHelper.validation, this.signUp);
         this.router.post('/login', userRules.forSignIn, authHelper.validation, this.login);
-        this.router.post('/forgot-password', this.forgotPasword);
+        this.router.post('/forgot-password', this.forgotPassword);
     }
 
     public async signUp(req: Request, res: Response): Promise<void> {
@@ -53,7 +53,7 @@ export class AuthController extends BaseCotroller {
         }
     }
 
-    public async forgotPasword(req: Request, res: Response): Promise<void> {
+    public async forgotPassword(req: Request, res: Response): Promise<void> {
         try {
 
             const user: UserLib = new UserLib();
@@ -76,7 +76,7 @@ export class AuthController extends BaseCotroller {
             ResponseHandler.JSONSUCCESS(req, res);
         } catch (err) {
             res.locals.data = err;
-            ResponseHandler.JSONERROR(req, res, 'forgotPasword');
+            ResponseHandler.JSONERROR(req, res, 'forgotPassword');
         }
     }
 
@@ -87,7 +87,7 @@ export class AuthController extends BaseCotroller {
 
         } catch (err) {
             res.locals.data = err;
-            ResponseHandler.JSONERROR(req, res, 'forgotPasword');
+            ResponseHandler.JSONERROR(req, res, 'forgotPassword');
         }
     }
 }
