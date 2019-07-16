@@ -5,7 +5,9 @@ import { Messages } from './../../constants';
 import { logger } from './../../logger';
 import { userModel } from './user.model';
 import { IUser, IUserRequest } from './user.type';
-
+/**
+ * UserLib
+ */
 export class UserLib {
 
     public async generateHash(password: string): Promise<string> {

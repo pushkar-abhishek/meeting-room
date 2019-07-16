@@ -1,7 +1,9 @@
 import { PaginateResult } from 'mongoose';
 import { productModel } from './product.model';
 import { IProduct } from './product.type';
-
+/**
+ * ProductLib
+ */
 export class ProductLib {
 
     public async getProduct(filters: any, options: any): Promise<PaginateResult<IProduct>> {

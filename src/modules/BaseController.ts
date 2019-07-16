@@ -1,5 +1,7 @@
 import {Application, Router } from 'express';
-
+/**
+ * BaseController class
+ */
 export abstract class BaseCotroller {
 
     protected router: Router;

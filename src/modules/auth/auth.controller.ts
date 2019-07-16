@@ -4,7 +4,9 @@ import { AuthHelper, EmailServer, ResponseHandler, Utils } from './../../helpers
 import { UserLib } from './../user/user.lib';
 import { userRules } from './../user/user.rules';
 import { IUser } from './../user/user.type';
-
+/**
+ * authController
+ */
 export class AuthController extends BaseCotroller {
 
     constructor() {
@@ -69,8 +71,8 @@ export class AuthController extends BaseCotroller {
                     code: '1234',
                 },
             };
-            mailer.sendEmail(options);
             ResponseHandler.JSONSUCCESS(req, res);
+            await mailer.sendEmail(options);
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'forgotPasword');

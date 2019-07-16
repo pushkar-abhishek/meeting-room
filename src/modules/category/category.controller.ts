@@ -4,7 +4,9 @@ import { BaseCotroller } from '../BaseController';
 import { CategoryLib } from './category.lib';
 import { categoryRule } from './category.rule';
 import { ICategory } from './category.type';
-
+/**
+ * category controller
+ */
 export class CategoryController extends BaseCotroller {
 
     constructor () {

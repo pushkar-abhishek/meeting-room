@@ -3,7 +3,9 @@ import * as HttpStatus from 'http-status-codes';
 import * as _ from 'lodash';
 import { IStandardErrorResponse, IStandardSuccessResponse } from '../abstractions/ApiResponses';
 import { Messages } from '../constants';
-
+/**
+ * response handler class
+ */
 // tslint:disable-next-line:no-unnecessary-class
 export class ResponseHandler {
 

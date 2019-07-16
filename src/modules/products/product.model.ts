@@ -1,6 +1,9 @@
 import { Document, model, PaginateModel, Schema} from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate';
 import { IProduct } from './product.type';
+/**
+ * ProductModel
+ */
 
 const generalSchema: Schema = new Schema({
         model_name: {

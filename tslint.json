@@ -39,11 +39,16 @@
        * Common Bugs and Correctness. The following rules should be turned on because they find
        * common bug patterns in the code or enforce type safety.
        */
-      "await-promise": true,
+       "await-promise": [
+        true,
+        "DocumentQuery",
+        "Query",
+        "MongooseThenable"
+      ],
       "forin": false,
       "jquery-deferred-must-complete": true,
       "label-position": true,
-      "match-default-export-name": true,
+      "match-default-export-name": false,
       "mocha-avoid-only": true,
       "mocha-no-side-effect-code": true,
       "no-any": false,

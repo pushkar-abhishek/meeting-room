@@ -5,7 +5,9 @@ import * as jwt from 'jsonwebtoken';
 import { Messages } from './../constants/messages';
 import { logger } from './../logger';
 import { ResponseHandler } from './response.handler';
-
+/**
+ * auth helper
+ */
 export class AuthHelper {
 
      public async validation(req: Request, res: Response, next: NextFunction): Promise <void> {

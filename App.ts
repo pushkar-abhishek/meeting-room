@@ -4,23 +4,23 @@ import * as express from 'express';
 import * as http from 'http';
 import * as mongoose from 'mongoose';
 import { registerRoutes } from './src/routes';
-
+/**
+ * main file
+ */
 export class App {
 
     public express: express.Application;
     public mongoUrl: string = process.env.MONGO_URL;
     public httpServer: http.Server;
 
-    constructor() {
-        this.express = express();
-
-        this.middleware();
-        this.mongoSetup();
+    public async init(): Promise<void> {
+        await this.middleware();
+        await this.mongoSetup();
         this.setupRoutes();
         this.httpServer = http.createServer(this.express);
     }
 
-    private middleware(): void {
+    private async middleware(): Promise<void> {
 
         // cors
         this.express.use(cors());
@@ -44,7 +44,7 @@ export class App {
     private setupRoutes(): void {
         registerRoutes(this.express);
     }
-    private mongoSetup(): void {
-        mongoose.connect(this.mongoUrl, { autoIndex: true });
+    private async mongoSetup(): Promise<void> {
+        await mongoose.connect(this.mongoUrl, { autoIndex: true });
     }
 }

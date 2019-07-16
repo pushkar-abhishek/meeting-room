@@ -6,9 +6,19 @@ import { App } from './App';
 const PORT: number = Number(process.env.PORT);
 
 const httpServer: http.Server = new App().httpServer;
-httpServer.on('error', serverError);
-httpServer.on('listening', serverListening);
-httpServer.listen(PORT);
+const app: App = new App();
+let server: http.Server;
+app.init().then(() => {
+    app.express.set('port', PORT);
+    server = app.httpServer;
+    server.on('error', serverError);
+    server.on('listening', serverListening);
+    server.listen(PORT);
+}).catch((err: Error) => {
+    logger.error(err.name);
+    logger.error(err.message);
+    logger.error(err.stack);
+});
 
 function serverError(error: NodeJS.ErrnoException): void {
     if (error.syscall !== 'listen') {
