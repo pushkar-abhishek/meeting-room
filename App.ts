@@ -8,7 +8,7 @@ import * as yaml from 'yamljs';
 import { registerRoutes } from './src/routes';
 
 const swagOptions: any = { explorer: false };
-const swaggerDocument: any = yaml.load('./docs/swagger.yaml');
+const swaggerDocument: any = yaml.load('./swagger/swagger.yaml');
 
 /**
  * main file
