@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
 import { categoryModel } from './category.model';
 import { ICategory } from './category.type';
 
