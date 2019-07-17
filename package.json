@@ -12,7 +12,7 @@
     "prod": "nodemon dist/server.js",
     "test": "mocha --require ts-node/register test/**/*.ts",
     "prepush": "npm run tslint",
-    "tslint": "tslint --project tsconfig.json",
+    "tslint": "tslint --project tsconfig.json --fix",
     "tslint:fix": "tslint --project tsconfig.json --fix",
     "precommit": "lint-staged"
   },
