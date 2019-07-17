@@ -12,6 +12,7 @@
     "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts",
     "prod": "nodemon dist/server.js",
     "prepush": "npm run tslint",
+    "tslint": "tslint --project tsconfig.json",
     "tslint:fix": "tslint --project tsconfig.json --fix"
   },
   "husky": {
