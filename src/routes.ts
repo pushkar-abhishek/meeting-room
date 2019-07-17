@@ -12,5 +12,4 @@ export function registerRoutes(app: express.Application): void {
   new CategoryController().register(app);
   new ProductController().register(app);
   new CartController().register(app);
-
 }
