@@ -3,7 +3,13 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as http from 'http';
 import * as mongoose from 'mongoose';
+import * as swaggerUi from 'swagger-ui-express';
+import * as yaml from 'yamljs';
 import { registerRoutes } from './src/routes';
+
+const swagOptions: any = { explorer: false };
+const swaggerDocument: any = yaml.load('./docs/swagger.yaml');
+
 /**
  * main file
  */
@@ -38,6 +44,11 @@ export class App {
 
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: true }));
+    this.express.use(
+      '/docs',
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument, swagOptions),
+    );
   }
 
   private setupRoutes(): void {

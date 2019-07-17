@@ -6,9 +6,8 @@ import { ProductController } from './modules/products/product.controller';
 import { UserController } from './modules/user/user.controller';
 
 export function registerRoutes(app: express.Application): void {
-
-    new UserController().register(app);
-    new AuthController().register(app);
-    new CategoryController().register(app);
-    new ProductController().register(app);
+  new UserController().register(app);
+  new AuthController().register(app);
+  new CategoryController().register(app);
+  new ProductController().register(app);
 }
