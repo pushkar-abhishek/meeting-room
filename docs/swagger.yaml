@@ -1,0 +1,368 @@
+swagger: '2.0'
+info:
+  title: ShoppingApp
+  description: Neosoft Shopping App
+  version: 1.0.0
+host: localhost:1337
+schemes:
+  - http
+paths:
+  /api/categories:
+    post:
+      tags:
+        - Category
+      summary: Add categories
+      description: Add categories
+      operationId: addCategories
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: the "Categories" model
+          required: true
+          schema:
+            $ref: '#/definitions/Categories'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+    get:
+      tags:
+        - Category
+      summary: Get categories
+      description: Get categories
+      operationId: getCategories
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/products:
+    post:
+      tags:
+        - Product
+      summary: Add product
+      description: Add product
+      operationId: addProduct
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: the "Product" model
+          required: true
+          schema:
+            $ref: '#/definitions/Product'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+    get:
+      tags:
+        - Product
+      summary: Get Products
+      description: Get Products
+      operationId: getProducts
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/categories/{categoryId}:
+    delete:
+      tags:
+        - Category
+      summary: Delete categories
+      description: Delete categories
+      operationId: deleteCategories
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: "categoryId"
+        in: "path"
+        description: "_id of category to return"
+        required: true
+        type: "string"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+    put:
+      tags:
+        - Category
+      summary: Update categories
+      description: Update categories
+      operationId: updateCategories
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: "categoryId"
+          in: "path"
+          description: "_id of category to return"
+          required: true
+          type: "string"
+        - name: body
+          in: body
+          description: the "Categories" model
+          required: true
+          schema:
+            $ref: '#/definitions/Categories'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/products/{productId}:
+    delete:
+      tags:
+        - Product
+      summary: Delete Product
+      description: Delete Product
+      operationId: deleteProduct
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "_id of productId to return"
+        required: true
+        type: "string"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+    put:
+      tags:
+        - Product
+      summary: Update Product
+      description: Update Product
+      operationId: updateProduct
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: "productId"
+          in: "path"
+          description: "_id of category to return"
+          required: true
+          type: "string"
+        - name: body
+          in: body
+          description: the "Product" model
+          required: true
+          schema:
+            $ref: '#/definitions/Product'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/categories/{categoryId}:
+    get:
+      tags:
+        - Category
+      summary: Get category by id
+      description: Get category by id
+      operationId: getCategoryById
+      produces:
+        - application/json
+      parameters:
+      - name: "categoryId"
+        in: "path"
+        description: "_id of category to return"
+        required: true
+        type: "string"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/products/home-list:
+    get:
+      tags:
+        - Product
+      summary: Get product list under categories
+      description: Get product list under categories
+      operationId: getProductListUnderCategories
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/users/{userId}:
+    get:
+      tags:
+        - User
+      summary: Get user by Id
+      description: Get user by Id
+      operationId: getUserById
+      produces:
+        - application/json
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "_id of category to return"
+        required: true
+        type: "string"
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/users:
+    get:
+      tags:
+        - User
+      summary: Users
+      description: Users
+      operationId: users
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/auth/login:
+    post:
+      tags:
+        - User
+      summary: User signin
+      description: User signin
+      operationId: userSignin
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: the "User" model
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  /api/auth/sign-up:
+    post:
+      tags:
+        - User
+      summary: User signup
+      description: User signup
+      operationId: userSignup
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: the "User" model
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+definitions:
+  Product:
+    description: Model for Product
+    required:
+      - brand
+    properties:
+      brand:
+        type: string
+        x-example: Motorola
+      category_id:
+        type: string
+        x-example: 5d2d9bf1b3af78720a1f0a54
+      name:
+        type: string
+        x-example: Moto G
+      price:
+        type: string
+        x-example: '8999'
+  User:
+    description: Model for User
+    required:
+      - confirm_password
+    properties:
+      confirm_password:
+        type: string
+        x-example: jitendra123
+      email:
+        type: string
+        x-example: jitendra.kumar@neosofttech.com
+      first_name:
+        type: string
+        x-example: Jitendra
+      gender:
+        type: string
+        x-example: Male
+      last_name:
+        type: string
+        x-example: Kumar
+      password:
+        type: string
+        x-example: jitendra123
+  Categories:
+    description: Model for Categories
+    required:
+      - description
+    properties:
+      description:
+        type: string
+        x-example: mobile phone
+      name:
+        type: string
+        x-example: mobile
+securityDefinitions: {}
+security: []
+tags:
+  - name: User
+    description: Operations about User
+  - name: Product
+    description: Operations about Product
+  - name: Category
+    description: Operations about Category
