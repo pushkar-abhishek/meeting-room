@@ -1,10 +1,10 @@
-import { Application, Request, Response } from "express";
-import { Types } from "mongoose";
-import { AuthHelper, ResponseHandler } from "../../helpers";
-import { BaseController } from "../BaseController";
-import { CategoryLib } from "./category.lib";
-import { categoryRule } from "./category.rule";
-import { ICategory } from "./category.type";
+import { Application, Request, Response } from 'express';
+import { Types } from 'mongoose';
+import { AuthHelper, ResponseHandler } from '../../helpers';
+import { BaseController } from '../BaseController';
+import { CategoryLib } from './category.lib';
+import { categoryRule } from './category.rule';
+import { ICategory } from './category.type';
 /**
  * category controller
  */
@@ -15,24 +15,24 @@ export class CategoryController extends BaseController {
   }
 
   public register(app: Application): void {
-    app.use("/api/categories", this.router);
+    app.use('/api/categories', this.router);
   }
 
   public init(): void {
     const authHelper: AuthHelper = new AuthHelper();
 
-    this.router.get("/", this.listCategories);
-    this.router.get("/:id", this.getCategory);
-    this.router.put("/:id", authHelper.guard, this.updateCategory);
-    this.router.delete("/:id", authHelper.guard, this.deleteCategory);
+    this.router.get('/', this.listCategories);
+    this.router.get('/:id', this.getCategory);
+    this.router.put('/:id', authHelper.guard, this.updateCategory);
+    this.router.delete('/:id', authHelper.guard, this.deleteCategory);
     this.router.post(
-      "/",
+      '/',
       authHelper.guard,
       categoryRule.forAdd,
       authHelper.validation,
-      this.addCategory
+      this.addCategory,
     );
-    this.router.get("/dashboard-products", this.getHomeList);
+    this.router.get('/dashboard-products', this.getHomeList);
   }
 
   public async listCategories(req: Request, res: Response): Promise<void> {
@@ -43,7 +43,7 @@ export class CategoryController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "listCategories");
+      ResponseHandler.JSONERROR(req, res, 'listCategories');
     }
   }
 
@@ -51,16 +51,16 @@ export class CategoryController extends BaseController {
     try {
       const categoryLib: CategoryLib = new CategoryLib();
       const category: ICategory = await categoryLib.getCategoryById(
-        req.params.id
+        req.params.id,
       );
       if (!category) {
-        throw Error("Invalid category id passed");
+        throw Error('Invalid category id passed');
       }
       res.locals.data = category;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "listCategories");
+      ResponseHandler.JSONERROR(req, res, 'listCategories');
     }
   }
 
@@ -72,7 +72,7 @@ export class CategoryController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "listCategories");
+      ResponseHandler.JSONERROR(req, res, 'listCategories');
     }
   }
 
@@ -89,7 +89,7 @@ export class CategoryController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "getProducts");
+      ResponseHandler.JSONERROR(req, res, 'getProducts');
     }
   }
 
@@ -107,7 +107,7 @@ export class CategoryController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "updateCategory");
+      ResponseHandler.JSONERROR(req, res, 'updateCategory');
     }
   }
 
@@ -122,13 +122,13 @@ export class CategoryController extends BaseController {
       const data: any = { isDelete: true };
       const deletedCategory: any = await new CategoryLib().findByIdAndUpdate(
         id,
-        data
+        data,
       );
       res.locals.data = deletedCategory;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "deleteCategory");
+      ResponseHandler.JSONERROR(req, res, 'deleteCategory');
     }
   }
 }

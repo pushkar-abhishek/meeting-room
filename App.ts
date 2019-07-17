@@ -1,9 +1,9 @@
-import * as bodyParser from "body-parser";
-import * as cors from "cors";
-import * as express from "express";
-import * as http from "http";
-import * as mongoose from "mongoose";
-import { registerRoutes } from "./src/routes";
+import * as bodyParser from 'body-parser';
+import * as cors from 'cors';
+import * as express from 'express';
+import * as http from 'http';
+import * as mongoose from 'mongoose';
+import { registerRoutes } from './src/routes';
 /**
  * main file
  */
@@ -44,11 +44,11 @@ export class App {
     registerRoutes(this.express);
   }
   private async mongoSetup(): Promise<void> {
-    mongoose.set("debug", true);
+    mongoose.set('debug', true);
     await mongoose.connect(this.mongoUrl, {
       autoIndex: true,
       useNewUrlParser: true,
-      useCreateIndex: true
+      useCreateIndex: true,
     });
   }
 }

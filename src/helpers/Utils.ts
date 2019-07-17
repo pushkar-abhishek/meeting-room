@@ -1,6 +1,6 @@
-import * as crypto from "crypto";
-import { PaginateResult } from "mongoose";
-import { IPagination } from "../abstractions/ApiResponses";
+import * as crypto from 'crypto';
+import { PaginateResult } from 'mongoose';
+import { IPagination } from '../abstractions/ApiResponses';
 
 /**
  * Utils
@@ -11,14 +11,14 @@ export class Utils {
       total: response.total,
       limit: response.limit,
       page: response.page,
-      pages: response.pages
+      pages: response.pages,
     };
   }
 
   public async getToken(): Promise<string> {
     const buffer: Buffer = await this.generateRandomBytes();
 
-    return buffer.toString("hex");
+    return buffer.toString('hex');
   }
 
   public async generateRandomBytes(): Promise<any> {
