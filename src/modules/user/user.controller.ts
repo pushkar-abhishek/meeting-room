@@ -1,13 +1,16 @@
 import { Application, Request, Response } from 'express';
 import { PaginateResult } from 'mongoose';
-import { BaseCotroller } from '../BaseController';
+import { BaseController } from '../BaseController';
 import { AuthHelper, ResponseHandler, Utils } from './../../helpers';
 import { logger } from './../../logger';
 import { UserLib } from './user.lib';
 import { userRules } from './user.rules';
 import { IUser } from './user.type';
 
-export class UserController extends BaseCotroller {
+/**
+ * UserController
+ */
+export class UserController extends BaseController {
 
     constructor() {
         super();

@@ -4,6 +4,9 @@ import * as _ from 'lodash';
 import { IStandardErrorResponse, IStandardSuccessResponse } from '../abstractions/ApiResponses';
 import { Messages } from '../constants';
 
+/**
+ * ResponseHandler
+ */
 // tslint:disable-next-line:no-unnecessary-class
 export class ResponseHandler {
 
@@ -13,7 +16,7 @@ export class ResponseHandler {
             success: true,
             data: res.locals.data,
             pagination: res.locals.pagination,
-            message: res.locals.message || Messages.SUCCESSFULLT_RECIEVED,
+            message: res.locals.message || Messages.SUCCESS_RECEIVED,
         };
 
         res.status(HttpStatus.OK).jsonp(obj);

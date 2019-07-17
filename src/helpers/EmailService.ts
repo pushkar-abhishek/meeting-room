@@ -3,6 +3,9 @@ import * as mailer from 'nodemailer';
 import * as Mail from 'nodemailer/lib/mailer';
 import * as pug from 'pug';
 
+/**
+ * EmailServer
+ */
 export class EmailServer {
 
     public async sendEmail(options: any): Promise<any> {

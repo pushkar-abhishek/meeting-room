@@ -20,7 +20,6 @@ before(() => {
   });
   app.listen(process.env.PORT);
 });
-console.log('env : ', process.env.PORT);
 
 describe('User module', () => {
 

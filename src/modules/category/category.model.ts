@@ -11,6 +11,10 @@ export const categorySchema: Schema = new Schema (
         description: {
             type: String,
         },
+        isDelete: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,
