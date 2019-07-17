@@ -1,10 +1,10 @@
-import { check } from "express-validator/check";
+import { check } from 'express-validator/check';
 
 export const categoryRule: any = {
   forAdd: [
-    check("name")
+    check('name')
       .not()
       .isEmpty()
-      .withMessage("Category name is required")
-  ]
+      .withMessage('Category name is required'),
+  ],
 };

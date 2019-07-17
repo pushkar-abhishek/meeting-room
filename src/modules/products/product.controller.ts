@@ -1,10 +1,10 @@
-import { Application, Request, Response } from "express";
-import { PaginateResult, Types } from "mongoose";
-import { BaseController } from "../BaseController";
-import { AuthHelper, ResponseHandler, Utils } from "./../../helpers";
-import { CategoryLib } from "./../category/category.lib";
-import { ProductLib } from "./product.lib";
-import { IProduct } from "./product.type";
+import { Application, Request, Response } from 'express';
+import { PaginateResult, Types } from 'mongoose';
+import { BaseController } from '../BaseController';
+import { AuthHelper, ResponseHandler, Utils } from './../../helpers';
+import { CategoryLib } from './../category/category.lib';
+import { ProductLib } from './product.lib';
+import { IProduct } from './product.type';
 
 /**
  * ProductController
@@ -17,21 +17,21 @@ export class ProductController extends BaseController {
   }
 
   public register(app: Application): void {
-    app.use("/api/products", this.router);
+    app.use('/api/products', this.router);
   }
 
   public init(): void {
     const authHelper: AuthHelper = new AuthHelper();
-    this.router.get("/", this.getProducts);
-    this.router.put("/:id", authHelper.guard, this.updateProduct);
-    this.router.delete("/:id", authHelper.guard, this.deleteProduct);
+    this.router.get('/', this.getProducts);
+    this.router.put('/:id', authHelper.guard, this.updateProduct);
+    this.router.delete('/:id', authHelper.guard, this.deleteProduct);
     this.router.post(
-      "/",
+      '/',
       authHelper.guard,
       authHelper.validation,
-      this.addProduct
+      this.addProduct,
     );
-    this.router.get("/home-list", this.getHomeList);
+    this.router.get('/home-list', this.getHomeList);
   }
 
   public async getProducts(req: Request, res: Response): Promise<void> {
@@ -43,19 +43,19 @@ export class ProductController extends BaseController {
       }
       const options: any = {
         page: req.query.page ? Number(req.query.page) : 1,
-        limit: req.query.limit ? Number(req.query.limit) : 10
+        limit: req.query.limit ? Number(req.query.limit) : 10,
       };
       const user: ProductLib = new ProductLib();
       const users: PaginateResult<IProduct> = await user.getProduct(
         filters,
-        options
+        options,
       );
       res.locals.data = users.docs;
       res.locals.pagination = utils.getPaginateResponse(users);
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "getProducts");
+      ResponseHandler.JSONERROR(req, res, 'getProducts');
     }
   }
 
@@ -71,7 +71,7 @@ export class ProductController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "addProduct");
+      ResponseHandler.JSONERROR(req, res, 'addProduct');
     }
   }
 
@@ -88,7 +88,7 @@ export class ProductController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "getHomeList");
+      ResponseHandler.JSONERROR(req, res, 'getHomeList');
     }
   }
 
@@ -106,7 +106,7 @@ export class ProductController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "updateProduct");
+      ResponseHandler.JSONERROR(req, res, 'updateProduct');
     }
   }
 
@@ -121,13 +121,13 @@ export class ProductController extends BaseController {
       const data: any = { isDelete: true };
       const deletedProduct: any = await new ProductLib().findByIdAndUpdate(
         id,
-        data
+        data,
       );
       res.locals.data = deletedProduct;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, "deleteProduct");
+      ResponseHandler.JSONERROR(req, res, 'deleteProduct');
     }
   }
 }

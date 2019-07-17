@@ -1,6 +1,6 @@
-import * as mailer from "nodemailer";
-import * as Mail from "nodemailer/lib/mailer";
-import * as pug from "pug";
+import * as mailer from 'nodemailer';
+import * as Mail from 'nodemailer/lib/mailer';
+import * as pug from 'pug';
 
 /**
  * EmailServer
@@ -13,20 +13,20 @@ export class EmailServer {
       secure: Boolean(process.env.SECURE), // true for 465, false for other ports
       auth: {
         user: process.env.EMAIL_USERNAME, // generated ethereal user
-        pass: process.env.EMAIL_PASS // generated ethereal password
-      }
+        pass: process.env.EMAIL_PASS, // generated ethereal password
+      },
     });
 
     const mailOptions: Mail.Options = {
       from: process.env.EMAIL_FROM,
       to: options.to,
-      subject: options.subject
+      subject: options.subject,
     };
 
     if (options.templateName) {
       mailOptions.html = await this.getTemplate(
         options.templateName,
-        options.replace
+        options.replace,
       );
     }
 
@@ -39,11 +39,11 @@ export class EmailServer {
    */
   private async getTemplate(
     templateName: string,
-    options: object = {}
+    options: object = {},
   ): Promise<string> {
     return pug.renderFile(
       `${__dirname}/../../views/email-templates/${templateName}.pug`,
-      options
+      options,
     );
   }
 }

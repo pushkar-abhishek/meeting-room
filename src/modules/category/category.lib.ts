@@ -1,6 +1,6 @@
-import { Types } from "mongoose";
-import { categoryModel } from "./category.model";
-import { ICategory } from "./category.type";
+import { Types } from 'mongoose';
+import { categoryModel } from './category.model';
+import { ICategory } from './category.type';
 
 const isDelete: any = { isDelete: false };
 
@@ -18,7 +18,7 @@ export class CategoryLib {
 
   public async findByIdAndUpdate(
     id: Types.ObjectId,
-    data: ICategory
+    data: ICategory,
   ): Promise<ICategory> {
     return categoryModel.findByIdAndUpdate(id, { $set: data }, { new: true });
   }
@@ -34,26 +34,26 @@ export class CategoryLib {
       { $match: { ...isDelete } },
       {
         $lookup: {
-          from: "products",
-          as: "categories_products",
+          from: 'products',
+          as: 'categories_products',
           let: {
-            cat_id: "$_id"
+            cat_id: '$_id',
           },
           pipeline: [
             {
               $match: {
                 $expr: {
                   $and: [
-                    { $eq: ["$category_id", "$$cat_id"] },
-                    { $eq: ["$isDelete", false] }
-                  ]
-                }
-              }
+                    { $eq: ['$category_id', '$$cat_id'] },
+                    { $eq: ['$isDelete', false] },
+                  ],
+                },
+              },
             },
-            { $limit: 5 }
-          ]
-        }
-      }
+            { $limit: 5 },
+          ],
+        },
+      },
     ]);
   }
 }

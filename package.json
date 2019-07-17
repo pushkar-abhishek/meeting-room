@@ -18,7 +18,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run tslint:fix && pretty-quick --staged"
+      "pre-commit": "npm run tslint:fix"
     }
   },
   "lint-staged": {
