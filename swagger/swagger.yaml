@@ -3,7 +3,7 @@ info:
   title: ShoppingApp
   description: Neosoft Shopping App
   version: 1.0.0
-host: https://sandip-shopping-app.herokuapp.com/api
+host: https://sandip-shopping-app.herokuapp.com
 schemes:
   - http
 paths:
