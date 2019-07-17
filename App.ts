@@ -14,10 +14,11 @@ export class App {
     public httpServer: http.Server;
 
     public async init(): Promise<void> {
+        this.express = express();
+        this.httpServer = http.createServer(this.express);
         await this.middleware();
         await this.mongoSetup();
         this.setupRoutes();
-        this.httpServer = http.createServer(this.express);
     }
 
     private async middleware(): Promise<void> {

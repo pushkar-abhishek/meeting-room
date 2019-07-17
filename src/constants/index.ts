@@ -1,2 +1,2 @@
-// tslint:disable-next-line
-export * from './messages';
+
+export {Messages} from './messages';
