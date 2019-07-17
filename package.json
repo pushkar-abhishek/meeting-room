@@ -11,7 +11,7 @@
     "watch": "nodemon --watch 'src/**/*.ts' --exec ts-node server.ts",
     "prod": "nodemon dist/server.js",
     "test": "mocha --require ts-node/register test/**/*.ts",
-    "tslint": "tslint --project tsconfig.json --fix",
+    "tslint": "tslint --project tsconfig.json",
     "format": "prettier --write \"{,!(node_modules|dist|build|deploy|views|swagger|coverage)/**/}*.{ts,json}\"",
     "tslint:fix": "tslint --project tsconfig.json --fix",
     "precommit": "lint-staged"
