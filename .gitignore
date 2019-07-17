@@ -2,4 +2,7 @@ dist/
 node_modules/
 *.log
 logs/
-coverage/
+.env
+.env.*
+!.env.example
+coverage

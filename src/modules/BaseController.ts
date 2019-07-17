@@ -1,6 +1,9 @@
-import { Application, Router } from "express";
+import { Application, Router } from 'express';
 
-export abstract class BaseCotroller {
+/**
+ * BaseController
+ */
+export abstract class BaseController {
   protected router: Router;
   protected constructor() {
     this.router = Router();

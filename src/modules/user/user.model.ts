@@ -1,27 +1,38 @@
-import { Model, model, Schema } from "mongoose";
-import { IUser } from "./user.type";
+import { Document, Model, model, PaginateModel, Schema } from 'mongoose';
+import * as mongoosePaginate from 'mongoose-paginate';
+import { IUser } from './user.type';
 
-export const userSchema: Schema = new Schema({
-  password: {
-    type: String
+export const userSchema: Schema = new Schema(
+  {
+    password: {
+      type: String,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    first_name: {
+      required: 'Enter a first name',
+      type: String,
+    },
+    last_name: {
+      type: String,
+    },
+    gender: {
+      type: String,
+      enum: ['Male', 'Female'],
+    },
+    tmp_forgot_pass_code: {
+      type: String,
+    },
   },
-  created_date: {
-    default: Date.now,
-    type: Date
+  {
+    timestamps: true,
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  first_name: {
-    required: "Enter a first name",
-    type: String
-  },
-  last_name: {
-    required: "Enter a last name",
-    type: String
-  }
-});
+);
 
-export const userModel: Model<IUser> = model<IUser>("User", userSchema);
+userSchema.plugin(mongoosePaginate);
+interface IUserModel<T extends Document> extends PaginateModel<T> {}
+
+export const userModel: IUserModel<IUser> = model<IUser>('User', userSchema);

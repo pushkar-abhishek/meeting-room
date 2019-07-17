@@ -1,4 +1,4 @@
 {
-    "env":"test",
-    "db": "mongodb://localhost/Tododb"
+  "env": "test",
+  "db": "mongodb://localhost/Tododb"
 }
