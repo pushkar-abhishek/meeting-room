@@ -10,6 +10,12 @@ import { registerRoutes } from './src/routes';
 const swagOptions: any = { explorer: false };
 const swaggerDocument: any = yaml.load('./swagger/swagger.yaml');
 
+if (process.env.NODE_ENV === 'production') {
+  swaggerDocument.host = 'sandip-shopping-app.herokuapp.com';
+} else {
+  swaggerDocument.host = `localhost:${process.env.PORT}`;
+}
+
 /**
  * main file
  */
