@@ -43,7 +43,7 @@ export class UserLib {
   }
 
   public async getUserByEmail(email: string): Promise<IUser> {
-    return userModel.findOne({ email: email });
+    return userModel.findOne({ email: email }, '+password');
   }
 
   /**
@@ -69,7 +69,8 @@ export class UserLib {
     email: string,
     password: string,
   ): Promise<any> {
-    const user: IUser = await this.getUserByEmail(email);
+    let user: IUser = await this.getUserByEmail(email);
+    user = JSON.parse(JSON.stringify(user));
     if (user !== null) {
       const isValidPass: boolean = await this.comparePassword(
         password,

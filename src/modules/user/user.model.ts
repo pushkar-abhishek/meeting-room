@@ -6,6 +6,7 @@ export const userSchema: Schema = new Schema(
   {
     password: {
       type: String,
+      select: false,
     },
     email: {
       type: String,
