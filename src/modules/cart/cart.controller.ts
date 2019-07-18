@@ -32,9 +32,7 @@ export class CartController extends BaseController {
     try {
       const utils: Utils = new Utils();
       const filters: any = {};
-      if (req.query && req.query.brand) {
-        filters.brand = req.query.brand;
-      }
+      filters.user_id = req.body.loggedinUserId;
       const options: any = {
         page: req.query.page ? Number(req.query.page) : 1,
         limit: req.query.limit ? Number(req.query.limit) : 10,
@@ -56,6 +54,7 @@ export class CartController extends BaseController {
   public async getCarts(req: Request, res: Response): Promise<void> {
     try {
       const filters: any = {};
+      filters.user_id = req.body.loggedinUserId;
       const cart: CartLib = new CartLib();
       const carts: ICart[] = await cart.getCarts(filters);
       res.locals.data = carts;
