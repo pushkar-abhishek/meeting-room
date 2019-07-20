@@ -21,6 +21,7 @@ export class CategoryController extends BaseController {
   public init(): void {
     const authHelper: AuthHelper = new AuthHelper();
 
+    this.router.get('/dashboard-products', this.getHomeList);
     this.router.get('/', this.listCategories);
     this.router.get('/:id', this.getCategory);
     this.router.put('/:id', authHelper.guard, this.updateCategory);
@@ -32,7 +33,6 @@ export class CategoryController extends BaseController {
       authHelper.validation,
       this.addCategory,
     );
-    this.router.get('/dashboard-products', this.getHomeList);
   }
 
   public async listCategories(req: Request, res: Response): Promise<void> {
