@@ -22,7 +22,10 @@ export class ProductController extends BaseController {
 
   public init(): void {
     const authHelper: AuthHelper = new AuthHelper();
-    this.router.get('/', this.getProducts);
+    this.router.get('/byCategoryId/:id', this.getProductsByCategoryId);
+    this.router.get('/home-list', this.getHomeList);
+
+    this.router.get('/',  authHelper.guard, this.getProducts);
     this.router.put('/:id', authHelper.guard, this.updateProduct);
     this.router.delete('/:id', authHelper.guard, this.deleteProduct);
     this.router.post(
@@ -31,7 +34,6 @@ export class ProductController extends BaseController {
       authHelper.validation,
       this.addProduct,
     );
-    this.router.get('/home-list', this.getHomeList);
   }
 
   public async getProducts(req: Request, res: Response): Promise<void> {
@@ -130,4 +132,32 @@ export class ProductController extends BaseController {
       ResponseHandler.JSONERROR(req, res, 'deleteProduct');
     }
   }
+
+  public async getProductsByCategoryId(req: Request, res: Response): Promise<void> {
+    try {
+      const utils: Utils = new Utils();
+      const filters: any = {};
+      if (req.query && req.query.brand) {
+        filters.brand = req.query.brand;
+      }
+      filters.category_id = req.params.id;
+      const options: any = {
+        page: req.query.page ? Number(req.query.page) : 1,
+        limit: req.query.limit ? Number(req.query.limit) : 10,
+        select: 'images name price discount brand',
+      };
+      const user: ProductLib = new ProductLib();
+      const users: PaginateResult<IProduct> = await user.getProduct(
+        filters,
+        options,
+      );
+      res.locals.data = users.docs;
+      res.locals.pagination = utils.getPaginateResponse(users);
+      ResponseHandler.JSONSUCCESS(req, res);
+    } catch (err) {
+      res.locals.data = err;
+      ResponseHandler.JSONERROR(req, res, 'getProducts');
+    }
+  }
+
 }
