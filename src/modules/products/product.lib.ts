@@ -41,4 +41,10 @@ export class ProductLib {
       },
     ]);
   }
+
+  public async getProductById(id: string): Promise<IProduct> {
+    return productModel.findOne({
+      _id: id,
+    });
+  }
 }

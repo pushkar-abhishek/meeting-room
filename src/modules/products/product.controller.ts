@@ -24,6 +24,7 @@ export class ProductController extends BaseController {
     const authHelper: AuthHelper = new AuthHelper();
     this.router.get('/byCategoryId/:id', this.getProductsByCategoryId);
     this.router.get('/home-list', this.getHomeList);
+    this.router.get('/:id/details', this.getDetails);
 
     this.router.get('/',  authHelper.guard, this.getProducts);
     this.router.put('/:id', authHelper.guard, this.updateProduct);
@@ -160,4 +161,20 @@ export class ProductController extends BaseController {
     }
   }
 
+  /**
+   * get produdct details by id
+   * @param req
+   * @param res
+   */
+  public async getDetails(req: Request, res: Response): Promise<void> {
+    try {
+      const product: any = await new ProductLib().getProductById(req.params.id);
+      res.locals.data = product;
+      ResponseHandler.JSONSUCCESS(req, res);
+    } catch (err) {
+      res.locals.data = err;
+      ResponseHandler.JSONERROR(req, res, 'updateProduct');
+    }
+
+  }
 }

@@ -14,7 +14,7 @@ export class CartLib {
   }
 
   public async getCarts(filters: any): Promise<ICart[]> {
-    return cartModel.find(filters).populate('product_id');
+    return cartModel.find(filters).populate('product_id', 'name price images discount brand');
   }
 
   public async add(data: ICart): Promise<ICart> {
