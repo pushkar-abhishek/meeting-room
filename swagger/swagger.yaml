@@ -433,19 +433,16 @@ definitions:
         x-example: jitendra123
       email:
         type: string
-        x-example: jitendra.kumar@neosofttech.com
+        x-example: pushkar.abhishek@neosofttech.com
       first_name:
         type: string
-        x-example: Jitendra
-      gender:
-        type: string
-        x-example: Male
+        x-example: Pushkar
       last_name:
         type: string
-        x-example: Kumar
+        x-example: Abhishek
       password:
         type: string
-        x-example: jitendra123
+        x-example: pushkar123
   Cart:
     description: Model for Cart
     required:

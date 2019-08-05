@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import { PaginateResult } from 'mongoose';
 import { Messages } from './../../constants';
@@ -41,13 +42,53 @@ export class UserLib {
     return userObj.save();
   }
 
+  public async checkUserExistsForEmailOrUsername(emailTxt: string): Promise<IUser> {
+    const query: object = { email: emailTxt };
+    return userModel.findOne(query);
+  }
+
+  public async addUser(userData: IUser, verification_token: string): Promise<IUser> {
+    try {
+      const currentUser: IUser = await this.checkUserExistsForEmailOrUsername(userData.email);
+      if (currentUser !== null) {
+        const errorMessage: string =
+          (currentUser.email === userData.email) ?
+            Messages.USERNAME_ALREADY_EXIST :
+            Messages.EMAIL_ALREADY_EXIST;
+
+        return Promise.reject({
+          success: false,
+          error: errorMessage,
+        });
+      } else {
+        userData.password = await this.generateHash(userData.password);
+        const userObj: IUser = new userModel(userData);
+        userObj.verification_token = verification_token;
+        return userObj.save();
+      }
+    } catch (err) {
+      return Promise.reject({
+        success: false,
+        error: `${err}`,
+      });
+    }
+  }
+
   public async getUserByEmail(email: string): Promise<IUser> {
     return userModel.findOne({ email: email }, '+password');
+  }
+
+  /**
+   * generate Random token
+   */
+  public async generateRandomToken(): Promise<string> {
+    return crypto.randomBytes(20).toString('hex');
   }
 
   public async getUserByVerificationCode(code: any): Promise<IUser> {
     return userModel.findOne({ account_recovery_code: code }, '-password');
   }
+
   /**
    * updateUser
    * @param userId
@@ -67,6 +108,18 @@ export class UserLib {
     return userModel.findOneAndDelete({ _id: id });
   }
 
+  public async getUserByResetPassToken(token: string): Promise<IUser> {
+    return userModel.findOne(
+      {
+        verification_token: token,
+        // resetPasswordExpires: { $gt: new Date() },
+      });
+  }
+
+  public async patch(userId: string, userData: IUserRequest): Promise<IUser> {
+    return userModel.findByIdAndUpdate({ _id: userId }, { $set: userData }, { new: true });
+  }
+
   public async loginUserAndCreateToken(
     email: string,
     password: string,
@@ -74,22 +127,30 @@ export class UserLib {
     let user: IUser = await this.getUserByEmail(email);
     user = JSON.parse(JSON.stringify(user));
     if (user !== null) {
-      const isValidPass: boolean = await this.comparePassword(
-        password,
-        user.password,
-      );
-      if (isValidPass) {
-        const token: string = jwt.sign({ id: user._id }, process.env.SECRET, {
-          expiresIn: '24h',
-        });
-        user.password = undefined;
-
-        return { user, token };
+      if (!user.is_active) {
+        throw new Error(Messages.USER_DEACTIVATED);
       } else {
-        throw new Error(Messages.INVALID_CREDENTIALS);
+        if (!user.is_verified) {
+          throw new Error(Messages.NOT_VERIFIED);
+        } else {
+          const isValidPass: boolean = await this.comparePassword(
+            password,
+            user.password,
+          );
+          if (isValidPass) {
+            const token: string = jwt.sign({ id: user._id }, process.env.SECRET, {
+              // expiresIn: '24h',
+            });
+            user.password = undefined;
+            return { user, token };
+          } else {
+            throw new Error(Messages.INVALID_CREDENTIALS);
+          }
+        }
       }
     } else {
       throw new Error(Messages.INVALID_CREDENTIALS);
     }
   }
 }
+

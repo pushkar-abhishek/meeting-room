@@ -2,15 +2,16 @@ import * as changeCase from 'change-case';
 import { Application, Request, Response } from 'express';
 import * as randomstring from 'randomstring';
 import { BaseController } from '../BaseController';
+import * as crypto from 'crypto';
 import {
   AuthHelper,
   EmailServer,
-  ResponseHandler,
-  Utils,
+  ResponseHandler
 } from './../../helpers';
 import { UserLib } from './../user/user.lib';
 import { userRules } from './../user/user.rules';
 import { IUser } from './../user/user.type';
+
 
 /**
  * AuthController
@@ -41,18 +42,40 @@ export class AuthController extends BaseController {
     );
     this.router.post('/forgot-password', this.forgotPassword);
     this.router.post('/reset-password',
-                     authHelper.validation,
-                     userRules.resetPassword,
-                     this.resetPassword);
+      authHelper.validation,
+      userRules.resetPassword,
+      this.resetPassword);
   }
 
+  /**
+   * API to register (User Only)
+   * @param req 
+   * @param res 
+   */
   public async signUp(req: Request, res: Response): Promise<void> {
     try {
       const user: UserLib = new UserLib();
+      const mailer: EmailServer = new EmailServer();
       const userData: IUser = req.body;
-      const userResult: IUser = await user.saveUser(userData);
-      res.locals.data = userResult;
+      const verification_token: string = await crypto.randomBytes(20).toString('hex');;
+      const userResult: IUser = await user.addUser(userData, verification_token);
+
+      // const verifyAccountURL: string = await this.generateVerifyAccountUrl(userResult._id);
+
+      const options: any = {
+        subject: 'Verify Account',
+        templateName: 'verify-account',
+        to: userData.email,
+        replace: {
+          code: verification_token,
+          name: changeCase.titleCase(userResult.first_name)
+        },
+      };
+
+      // res.locals.data = userResult;
+
       ResponseHandler.JSONSUCCESS(req, res);
+      await mailer.sendEmail(options);
     } catch (err) {
       res.locals.data = err;
       ResponseHandler.JSONERROR(req, res, 'addUser');
@@ -96,10 +119,6 @@ export class AuthController extends BaseController {
           code: verification_code,
         },
       };
-      mailer
-        .sendEmail(options)
-        .then()
-        .catch();
       ResponseHandler.JSONSUCCESS(req, res);
       await mailer.sendEmail(options);
     } catch (err) {

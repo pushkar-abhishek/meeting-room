@@ -47,7 +47,15 @@ export const userSchema: Schema = new Schema({
     type: Boolean,
     default: true,
   },
-},                                           { timestamps: true });
+  verification_token: {
+    type: String,
+    default: null
+  },
+  is_verified: {
+    type: Boolean,
+    default: false
+  }
+}, { timestamps: true });
 
 userSchema.plugin(mongoosePaginate);
 interface IUserModel<T extends Document> extends PaginateModel<T> { }

@@ -9,6 +9,8 @@ export interface IUser extends Document {
   role?: string;
   is_active: boolean;
   department: any;
+  is_verified: boolean;
+  verification_token?: any;
   account_recovery_code?: any;
 }
 
@@ -19,6 +21,8 @@ export interface IUserRequest {
   last_name?: string;
   location?: string;
   role?: string;
+  verifiedEmail?: boolean;
   department?: string;
+  token?: any;
   account_recovery_code?: any;
 }

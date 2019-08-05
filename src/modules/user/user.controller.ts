@@ -5,7 +5,8 @@ import { AuthHelper, ResponseHandler, Utils } from './../../helpers';
 import { logger } from './../../logger';
 import { UserLib } from './user.lib';
 import { userRules } from './user.rules';
-import { IUser } from './user.type';
+import { IUser, IUserRequest } from './user.type';
+import { Messages } from './../../constants';
 
 /**
  * UserController
@@ -29,6 +30,7 @@ export class UserController extends BaseController {
       this.updateUser,
     );
     this.router.delete('/:id', this.deleteUser);
+    this.router.get('/verify/:token', this.verifiedEmail);
   }
 
   public register(app: Application): void {
@@ -37,8 +39,10 @@ export class UserController extends BaseController {
 
   public async getUsers(req: Request, res: Response): Promise<void> {
     try {
+      // req.body.loggedinUserId ---> user objectID
+
       const utils: Utils = new Utils();
-      const filters: any = {};
+      const filters: any = { role: { $ne: 'super_admin' } };
       const select: string = '-password';
 
       const options: any = {
@@ -48,7 +52,6 @@ export class UserController extends BaseController {
       const user: UserLib = new UserLib();
       const users: PaginateResult<IUser> = await user.getUsers(
         filters,
-        select,
         options,
       );
       res.locals.data = users.docs;
@@ -97,6 +100,28 @@ export class UserController extends BaseController {
     } catch (err) {
       res.locals.data = err;
       ResponseHandler.JSONERROR(req, res, 'deleteUser');
+    }
+  }
+
+  public async verifiedEmail(req: Request, res: Response): Promise<void> {
+    try {
+      const params: IUserRequest = req.params;
+      const token: string = req.params.token ? req.params.token : null;
+      const user: UserLib = new UserLib();
+      const userData: IUser = await user.getUserByResetPassToken(token);
+      if (userData !== null) {
+        let dataSet: object = {
+          verification_token: null,
+          is_verified: true
+        }
+        const result: IUser = await user.patch(userData._id, dataSet);
+        ResponseHandler.JSONSUCCESS(req, res);
+      } else {
+        throw new Error(Messages.SOMETHING_BAD);
+      }
+    } catch (err) {
+      res.locals.data = err;
+      ResponseHandler.JSONERROR(req, res, 'verifiedEmail');
     }
   }
 }
