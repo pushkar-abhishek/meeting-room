@@ -1,39 +1,55 @@
-import { Document, Model, model, PaginateModel, Schema } from 'mongoose';
+import { Document, model, PaginateModel, Schema } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate';
 import { IUser } from './user.type';
 
-export const userSchema: Schema = new Schema(
-  {
-    password: {
-      type: String,
-      select: false,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    first_name: {
-      required: 'Enter a first name',
-      type: String,
-    },
-    last_name: {
-      type: String,
-    },
-    gender: {
-      type: String,
-      enum: ['Male', 'Female'],
-    },
-    tmp_forgot_pass_code: {
-      type: String,
-    },
+export const userSchema: Schema = new Schema({
+  email: {
+    type: String,
+    required: true,
   },
-  {
-    timestamps: true,
+  first_name: {
+    required: 'Enter a first name',
+    trim: true,
+    type: String,
+    default: null,
   },
-);
+  last_name: {
+    trim: true,
+    type: String,
+    default: null,
+  },
+  password: {
+    type: String,
+    default: null,
+    trim: true,
+  },
+  location: {
+    type: Schema.Types.ObjectId,
+    ref: 'location',
+    default: null,
+  },
+  role: {
+    type: String,
+    enum: ['super_admin', 'admin', 'user'],
+    default: 'user',
+  },
+  department: {
+    type: String,
+    default: null,
+    trim: true,
+  },
+  account_recovery_code: {
+    type: String,
+    default: null,
+    trim: true,
+  },
+  is_active: {
+    type: Boolean,
+    default: true,
+  },
+},                                           { timestamps: true });
 
 userSchema.plugin(mongoosePaginate);
-interface IUserModel<T extends Document> extends PaginateModel<T> {}
+interface IUserModel<T extends Document> extends PaginateModel<T> { }
 
 export const userModel: IUserModel<IUser> = model<IUser>('User', userSchema);

@@ -94,13 +94,6 @@ export class UserController extends BaseController {
   public async deleteUser(req: Request, res: Response): Promise<any> {
     try {
       throw new Error('Not Allowed now');
-      const user: UserLib = new UserLib();
-      logger.info(`id ${req.params.id}`);
-      logger.info('delete');
-
-      const deletedUser: any = user.deleteUser(req.params.id);
-      res.locals.data = deletedUser;
-      ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;
       ResponseHandler.JSONERROR(req, res, 'deleteUser');

@@ -1,4 +1,6 @@
+import * as changeCase from 'change-case';
 import { Application, Request, Response } from 'express';
+import * as randomstring from 'randomstring';
 import { BaseController } from '../BaseController';
 import {
   AuthHelper,
@@ -38,6 +40,10 @@ export class AuthController extends BaseController {
       this.login,
     );
     this.router.post('/forgot-password', this.forgotPassword);
+    this.router.post('/reset-password',
+                     authHelper.validation,
+                     userRules.resetPassword,
+                     this.resetPassword);
   }
 
   public async signUp(req: Request, res: Response): Promise<void> {
@@ -74,20 +80,20 @@ export class AuthController extends BaseController {
     try {
       const user: UserLib = new UserLib();
       const mailer: EmailServer = new EmailServer();
-      const utils: Utils = new Utils();
 
       const email: string = req.body.email ? req.body.email : null;
-      const tmpForgotPassCode: string = await utils.getToken();
       const userData: IUser = await user.getUserByEmail(email);
+      const verification_code: any = changeCase.lowerCase(randomstring.generate(6));
+
       await user.updateUser(userData._id, {
-        tmp_forgot_pass_code: tmpForgotPassCode,
+        account_recovery_code: verification_code,
       });
       const options: any = {
         subject: 'Forgot Password',
         templateName: 'password-reset',
         to: userData.email,
         replace: {
-          code: '1234',
+          code: verification_code,
         },
       };
       mailer
@@ -105,10 +111,20 @@ export class AuthController extends BaseController {
   public async resetPassword(req: Request, res: Response): Promise<void> {
     try {
       const user: UserLib = new UserLib();
-      const mailer: EmailServer = new EmailServer();
+      const verification_code: string = req.body.verification_code ? req.body.verification_code : null;
+      const userData: IUser = await user.getUserByVerificationCode(verification_code);
+      if (!userData || !userData.account_recovery_code) {
+        throw new Error('You might not have yet requested for the Reset Password');
+      } else {
+        userData.password = req.body.password.trim();
+        userData.account_recovery_code = '';
+        const userResult: IUser = await user.saveUser(userData);
+        res.locals.data = userResult;
+        ResponseHandler.JSONSUCCESS(req, res);
+      }
     } catch (err) {
       res.locals.data = err;
-      ResponseHandler.JSONERROR(req, res, 'forgotPassword');
+      ResponseHandler.JSONERROR(req, res, 'resetPassword');
     }
   }
 }

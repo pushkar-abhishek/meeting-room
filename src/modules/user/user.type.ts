@@ -3,18 +3,22 @@ export interface IUser extends Document {
   _id: string;
   password?: string;
   email?: string;
-  firstName?: string;
-  lastName?: string;
-  created_date?: Date;
-  token?: string;
+  first_name: string;
+  last_name: string;
+  location?: string;
+  role?: string;
+  is_active: boolean;
+  department: any;
+  account_recovery_code?: any;
 }
 
 export interface IUserRequest {
   password?: string;
   email?: string;
-  firstName?: string;
-  lastName?: string;
-  created_date?: Date;
-  token?: string;
-  tmp_forgot_pass_code?: string;
+  first_name?: string;
+  last_name?: string;
+  location?: string;
+  role?: string;
+  department?: string;
+  account_recovery_code?: any;
 }

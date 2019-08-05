@@ -1,5 +1,5 @@
 {
-  "name": "typescript_test",
+  "name": "MeetingRoom",
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
@@ -30,11 +30,13 @@
   "engines": {
     "node": "8.9.3"
   },
-  "author": "Sandip Ghadge",
+  "author": "Neosoft Tech",
   "license": "ISC",
   "dependencies": {
+    "@types/randomstring": "^1.1.6",
     "bcrypt": "3.0.6",
     "body-parser": "^1.18.3",
+    "change-case": "^3.1.0",
     "cors": "2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
@@ -48,6 +50,7 @@
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
     "pug": "2.0.4",
+    "randomstring": "^1.1.5",
     "swagger-ui-express": "^4.0.7",
     "winston": "^3.1.0",
     "yamljs": "^0.3.0"

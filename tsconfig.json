@@ -11,6 +11,13 @@
     "outDir": "./dist",
     "baseUrl": "./src"
   },
-  "include": ["src/**/*.ts", "tests/**/*.spec.ts", "server.ts", "App.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.spec.ts",
+    "server.ts",
+    "app.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

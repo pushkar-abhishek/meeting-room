@@ -15,7 +15,7 @@ export const userRules: any = {
       .isEmpty()
       .withMessage('Please enter password')
       .isLength({ min: 8 })
-      .withMessage('Password should be greater than 8 char'),
+      .withMessage('Password should be greater than 8 character'),
   ],
   forSignUser: [
     check('email')
@@ -23,7 +23,9 @@ export const userRules: any = {
       .isEmpty()
       .withMessage('Please enter email address')
       .isEmail()
-      .withMessage('Invalid email address'),
+      .withMessage('Invalid email address')
+      .matches(/@(neosofttech|wwindia)\.com$/i)
+      .withMessage('Email must be for Neosoft Organisation'),
 
     check('password')
       .not()
@@ -46,11 +48,6 @@ export const userRules: any = {
       .not()
       .isEmpty()
       .withMessage('Please enter first name'),
-
-    check('gender')
-      .not()
-      .isEmpty()
-      .withMessage('Please select gender'),
   ],
 
   forUpdateUser: [
@@ -59,6 +56,17 @@ export const userRules: any = {
       .isEmpty()
       .withMessage('Please enter email address')
       .isEmail()
-      .withMessage('Invalid email address'),
+      .withMessage('Invalid email address')
+      .matches(/@(neosofttech|wwindia)\.com$/i)
+      .withMessage('Email must be for Neosoft Organisation'),
+  ],
+
+  resetPassword: [
+    check('password')
+      .not()
+      .isEmpty()
+      .withMessage('Password cannot be blank')
+      .isLength({ min: 8 })
+      .withMessage('Password should be greater than 8 character'),
   ],
 };

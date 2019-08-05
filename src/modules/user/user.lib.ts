@@ -2,7 +2,7 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { PaginateResult } from 'mongoose';
 import { Messages } from './../../constants';
-import { logger } from './../../logger';
+// import { logger } from './../../logger';
 import { userModel } from './user.model';
 import { IUser, IUserRequest } from './user.type';
 
@@ -11,6 +11,7 @@ import { IUser, IUserRequest } from './user.type';
  *
  */
 export class UserLib {
+
   public async generateHash(password: string): Promise<string> {
     return bcrypt.hashSync(password, 10);
   }
@@ -24,10 +25,8 @@ export class UserLib {
 
   public async getUsers(
     filters: any,
-    projection: any,
     options: any,
   ): Promise<PaginateResult<IUser>> {
-    //return userModel.find(filters, projection, options);
     return userModel.paginate(filters, options);
   }
 
@@ -46,6 +45,9 @@ export class UserLib {
     return userModel.findOne({ email: email }, '+password');
   }
 
+  public async getUserByVerificationCode(code: any): Promise<IUser> {
+    return userModel.findOne({ account_recovery_code: code }, '-password');
+  }
   /**
    * updateUser
    * @param userId
