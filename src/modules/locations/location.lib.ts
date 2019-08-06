@@ -32,4 +32,3 @@ export class LocationLib {
         return locationModel.paginate(filters, options);
     }
 }
-

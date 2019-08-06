@@ -1,12 +1,12 @@
 import { Application, Request, Response } from 'express';
 import { PaginateResult } from 'mongoose';
 import { BaseController } from '../BaseController';
+import { Messages } from './../../constants';
 import { AuthHelper, ResponseHandler, Utils } from './../../helpers';
 import { logger } from './../../logger';
 import { UserLib } from './user.lib';
 import { userRules } from './user.rules';
 import { IUser, IUserRequest } from './user.type';
-import { Messages } from './../../constants';
 
 /**
  * UserController
@@ -32,7 +32,6 @@ export class UserController extends BaseController {
     this.router.delete('/:id', this.deleteUser);
     this.router.get('/verify/:token', this.verifiedEmail);
 
-
     // this.router.put(
     //   '/info/:id',
     //   authHelper.guard,
@@ -40,7 +39,6 @@ export class UserController extends BaseController {
     //   authHelper.validation,
     //   this.updateInfo,
     // );
-
 
   }
 
@@ -124,10 +122,10 @@ export class UserController extends BaseController {
       const user: UserLib = new UserLib();
       const userData: IUser = await user.getUserByResetPassToken(token);
       if (userData !== null) {
-        let dataSet: object = {
+        const dataSet: object = {
           verification_token: null,
-          is_verified: true
-        }
+          is_verified: true,
+        };
         const result: IUser = await user.patch(userData._id, dataSet);
         ResponseHandler.JSONSUCCESS(req, res);
       } else {
@@ -138,6 +136,5 @@ export class UserController extends BaseController {
       ResponseHandler.JSONERROR(req, res, 'verifiedEmail');
     }
   }
-
 
 }

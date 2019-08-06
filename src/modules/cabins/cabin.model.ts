@@ -25,8 +25,8 @@ export const cabinSchema: Schema = new Schema({
         type: String,
         default: null,
     },
-    
-}, { timestamps: true });
+
+},                                            { timestamps: true });
 
 cabinSchema.plugin(mongoosePaginate);
 interface IUserModel<T extends Document> extends PaginateModel<T> { }

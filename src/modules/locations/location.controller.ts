@@ -1,14 +1,13 @@
 import { Application, Request, Response } from 'express';
 import { PaginateResult } from 'mongoose';
-import { BaseController } from '../BaseController';
 import { AuthHelper } from '../../helpers';
-import { LocationLib } from './location.lib';
-import { UserLib } from '../user/user.lib';
-import { IUser } from '../user/user.type'
 import { ResponseHandler, Utils } from '../../helpers';
-import { ILocation, ILocationRequest } from './location.type';
+import { BaseController } from '../BaseController';
+import { UserLib } from '../user/user.lib';
+import { IUser } from '../user/user.type';
 import { Messages } from './../../constants';
-
+import { LocationLib } from './location.lib';
+import { ILocation, ILocationRequest } from './location.type';
 
 /**
  * Location Controller

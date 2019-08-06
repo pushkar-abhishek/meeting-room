@@ -78,6 +78,6 @@ export const userRules: any = {
     check('department')
       .not()
       .isEmpty()
-      .withMessage('Please proivde your department')
-  ]
+      .withMessage('Please proivde your department'),
+  ],
 };

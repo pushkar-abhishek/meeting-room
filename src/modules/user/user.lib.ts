@@ -44,6 +44,7 @@ export class UserLib {
 
   public async checkUserExistsForEmailOrUsername(emailTxt: string): Promise<IUser> {
     const query: object = { email: emailTxt };
+
     return userModel.findOne(query);
   }
 
@@ -64,6 +65,7 @@ export class UserLib {
         userData.password = await this.generateHash(userData.password);
         const userObj: IUser = new userModel(userData);
         userObj.verification_token = verification_token;
+
         return userObj.save();
       }
     } catch (err) {
@@ -100,6 +102,7 @@ export class UserLib {
   ): Promise<any> {
     const user: IUser = await userModel.findById(userId);
     user.set(userData);
+
     return user.save();
   }
 
@@ -141,6 +144,7 @@ export class UserLib {
               // expiresIn: '24h',
             });
             user.password = undefined;
+
             return { user, token };
           } else {
             throw new Error(Messages.INVALID_CREDENTIALS);
@@ -152,4 +156,3 @@ export class UserLib {
     }
   }
 }
-
