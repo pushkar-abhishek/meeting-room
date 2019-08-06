@@ -100,7 +100,6 @@ export class UserLib {
   ): Promise<any> {
     const user: IUser = await userModel.findById(userId);
     user.set(userData);
-
     return user.save();
   }
 

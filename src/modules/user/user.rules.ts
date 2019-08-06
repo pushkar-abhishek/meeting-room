@@ -69,4 +69,15 @@ export const userRules: any = {
       .isLength({ min: 8 })
       .withMessage('Password should be greater than 8 character'),
   ],
+  updateInfo: [
+    check('first_name')
+      .not()
+      .isEmpty()
+      .withMessage('Please enter first name'),
+
+    check('department')
+      .not()
+      .isEmpty()
+      .withMessage('Please proivde your department')
+  ]
 };

@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
-  title: ShoppingApp
-  description: Neosoft Shopping App
+  title: MeetingRoom App
+  description: Neosoft MeetingRoom App
   version: 1.0.0
 host: ''
 schemes:

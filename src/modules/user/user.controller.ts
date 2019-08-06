@@ -31,6 +31,17 @@ export class UserController extends BaseController {
     );
     this.router.delete('/:id', this.deleteUser);
     this.router.get('/verify/:token', this.verifiedEmail);
+
+
+    // this.router.put(
+    //   '/info/:id',
+    //   authHelper.guard,
+    //   userRules.updateInfo,
+    //   authHelper.validation,
+    //   this.updateInfo,
+    // );
+
+
   }
 
   public register(app: Application): void {
@@ -103,6 +114,9 @@ export class UserController extends BaseController {
     }
   }
 
+  /**
+   * API to get verified after the click on the confirmation link sent on Registration.
+   */
   public async verifiedEmail(req: Request, res: Response): Promise<void> {
     try {
       const params: IUserRequest = req.params;
@@ -124,4 +138,6 @@ export class UserController extends BaseController {
       ResponseHandler.JSONERROR(req, res, 'verifiedEmail');
     }
   }
+
+
 }
