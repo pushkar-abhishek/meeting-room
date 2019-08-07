@@ -12,7 +12,6 @@ import { IUser, IUserRequest } from './user.type';
  *
  */
 export class UserLib {
-
   public async generateHash(password: string): Promise<string> {
     return bcrypt.hashSync(password, 10);
   }
@@ -42,20 +41,27 @@ export class UserLib {
     return userObj.save();
   }
 
-  public async checkUserExistsForEmailOrUsername(emailTxt: string): Promise<IUser> {
+  public async checkUserExistsForEmailOrUsername(
+    emailTxt: string,
+  ): Promise<IUser> {
     const query: object = { email: emailTxt };
 
     return userModel.findOne(query);
   }
 
-  public async addUser(userData: IUser, verification_token: string): Promise<IUser> {
+  public async addUser(
+    userData: IUser,
+    verificationToken: string,
+  ): Promise<IUser> {
     try {
-      const currentUser: IUser = await this.checkUserExistsForEmailOrUsername(userData.email);
+      const currentUser: IUser = await this.checkUserExistsForEmailOrUsername(
+        userData.email,
+      );
       if (currentUser !== null) {
         const errorMessage: string =
-          (currentUser.email === userData.email) ?
-            Messages.USERNAME_ALREADY_EXIST :
-            Messages.EMAIL_ALREADY_EXIST;
+          currentUser.email === userData.email
+            ? Messages.USERNAME_ALREADY_EXIST
+            : Messages.EMAIL_ALREADY_EXIST;
 
         return Promise.reject({
           success: false,
@@ -64,7 +70,7 @@ export class UserLib {
       } else {
         userData.password = await this.generateHash(userData.password);
         const userObj: IUser = new userModel(userData);
-        userObj.verification_token = verification_token;
+        userObj.verification_token = verificationToken;
 
         return userObj.save();
       }
@@ -111,15 +117,18 @@ export class UserLib {
   }
 
   public async getUserByResetPassToken(token: string): Promise<IUser> {
-    return userModel.findOne(
-      {
-        verification_token: token,
-        // resetPasswordExpires: { $gt: new Date() },
-      });
+    return userModel.findOne({
+      verification_token: token,
+      // resetPasswordExpires: { $gt: new Date() },
+    });
   }
 
   public async patch(userId: string, userData: IUserRequest): Promise<IUser> {
-    return userModel.findByIdAndUpdate({ _id: userId }, { $set: userData }, { new: true });
+    return userModel.findByIdAndUpdate(
+      { _id: userId },
+      { $set: userData },
+      { new: true },
+    );
   }
 
   public async loginUserAndCreateToken(
@@ -140,9 +149,13 @@ export class UserLib {
             user.password,
           );
           if (isValidPass) {
-            const token: string = jwt.sign({ id: user._id }, process.env.SECRET, {
-              // expiresIn: '24h',
-            });
+            const token: string = jwt.sign(
+              { id: user._id },
+              process.env.SECRET,
+              {
+                // expiresIn: '24h',
+              },
+            );
             user.password = undefined;
 
             return { user, token };

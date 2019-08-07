@@ -37,7 +37,6 @@ export class AuthHelper {
   ): Promise<void> {
     try {
       const token: string = req.headers.authorization || req.query.token;
-      console.log('token', token);
       if (token) {
         const auth: any = jwt.verify(token, process.env.SECRET);
         if (auth) {

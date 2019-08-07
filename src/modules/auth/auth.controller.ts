@@ -3,11 +3,7 @@ import * as crypto from 'crypto';
 import { Application, Request, Response } from 'express';
 import * as randomstring from 'randomstring';
 import { BaseController } from '../BaseController';
-import {
-  AuthHelper,
-  EmailServer,
-  ResponseHandler,
-} from './../../helpers';
+import { AuthHelper, EmailServer, ResponseHandler } from './../../helpers';
 import { UserLib } from './../user/user.lib';
 import { userRules } from './../user/user.rules';
 import { IUser } from './../user/user.type';
@@ -40,10 +36,12 @@ export class AuthController extends BaseController {
       this.login,
     );
     this.router.post('/forgot-password', this.forgotPassword);
-    this.router.post('/reset-password',
-                     authHelper.validation,
-                     userRules.resetPassword,
-                     this.resetPassword);
+    this.router.post(
+      '/reset-password',
+      authHelper.validation,
+      userRules.resetPassword,
+      this.resetPassword,
+    );
   }
 
   /**
@@ -56,11 +54,13 @@ export class AuthController extends BaseController {
       const user: UserLib = new UserLib();
       const mailer: EmailServer = new EmailServer();
       const userData: IUser = req.body;
-      const verification_token: string = await crypto.randomBytes(20).toString('hex');
-      const userResult: IUser = await user.addUser(userData, verification_token);
+      // tslint:disable-next-line: await-promise
+      const verificationToken: string = await crypto
+        .randomBytes(20)
+        .toString('hex');
+      const userResult: IUser = await user.addUser(userData, verificationToken);
 
       // const verifyAccountURL: string = await this.generateVerifyAccountUrl(userResult._id);
-      console.log('11111111111111111111111');
 
       const options: any = {
         subject: 'Verify Account',
@@ -106,17 +106,19 @@ export class AuthController extends BaseController {
 
       const email: string = req.body.email ? req.body.email : null;
       const userData: IUser = await user.getUserByEmail(email);
-      const verification_code: any = changeCase.lowerCase(randomstring.generate(6));
+      const verificationCode: any = changeCase.lowerCase(
+        randomstring.generate(6),
+      );
 
       await user.updateUser(userData._id, {
-        account_recovery_code: verification_code,
+        account_recovery_code: verificationCode,
       });
       const options: any = {
         subject: 'Forgot Password',
         templateName: 'password-reset',
         to: userData.email,
         replace: {
-          code: verification_code,
+          code: verificationCode,
         },
       };
       ResponseHandler.JSONSUCCESS(req, res);
@@ -130,10 +132,16 @@ export class AuthController extends BaseController {
   public async resetPassword(req: Request, res: Response): Promise<void> {
     try {
       const user: UserLib = new UserLib();
-      const verification_code: string = req.body.verification_code ? req.body.verification_code : null;
-      const userData: IUser = await user.getUserByVerificationCode(verification_code);
+      const verificationCode: string = req.body.verification_code
+        ? req.body.verification_code
+        : null;
+      const userData: IUser = await user.getUserByVerificationCode(
+        verificationCode,
+      );
       if (!userData || !userData.account_recovery_code) {
-        throw new Error('You might not have yet requested for the Reset Password');
+        throw new Error(
+          'You might not have yet requested for the Reset Password',
+        );
       } else {
         userData.password = req.body.password.trim();
         userData.account_recovery_code = '';
