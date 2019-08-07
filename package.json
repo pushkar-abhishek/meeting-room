@@ -23,7 +23,7 @@
     ]
   },
   "engines": {
-    "node": "8.9.3"
+    "node": "10.14.2"
   },
   "author": "Neosoft Tech",
   "license": "ISC",
