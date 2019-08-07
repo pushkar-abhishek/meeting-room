@@ -49,7 +49,6 @@ export class UserController extends BaseController {
   public async getUsers(req: Request, res: Response): Promise<void> {
     try {
       // req.body.loggedinUserId ---> user objectID
-
       const utils: Utils = new Utils();
       const filters: any = { role: { $ne: 'super_admin' } };
 
