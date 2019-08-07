@@ -67,7 +67,7 @@ export class AuthController extends BaseController {
         templateName: 'verify-account',
         to: userData.email,
         replace: {
-          code: verification_token,
+          code: verificationToken,
           name: changeCase.titleCase(userResult.first_name),
         },
       };
