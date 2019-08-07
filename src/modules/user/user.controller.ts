@@ -52,7 +52,6 @@ export class UserController extends BaseController {
 
       const utils: Utils = new Utils();
       const filters: any = { role: { $ne: 'super_admin' } };
-      const select: string = '-password';
 
       const options: any = {
         page: req.query.page ? Number(req.query.page) : 1,
