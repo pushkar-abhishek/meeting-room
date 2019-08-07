@@ -41,9 +41,9 @@ export class AuthController extends BaseController {
     );
     this.router.post('/forgot-password', this.forgotPassword);
     this.router.post('/reset-password',
-      authHelper.validation,
-      userRules.resetPassword,
-      this.resetPassword);
+                     authHelper.validation,
+                     userRules.resetPassword,
+                     this.resetPassword);
   }
 
   /**
@@ -60,7 +60,7 @@ export class AuthController extends BaseController {
       const userResult: IUser = await user.addUser(userData, verification_token);
 
       // const verifyAccountURL: string = await this.generateVerifyAccountUrl(userResult._id);
-      console.log("11111111111111111111111");
+      console.log('11111111111111111111111');
 
       const options: any = {
         subject: 'Verify Account',

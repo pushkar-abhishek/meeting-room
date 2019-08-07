@@ -3,13 +3,13 @@ import { PaginateResult } from 'mongoose';
 import { AuthHelper } from '../../helpers';
 import { ResponseHandler, Utils } from '../../helpers';
 import { BaseController } from '../BaseController';
+import { LocationLib } from '../locations/location.lib';
+import { ILocationRequest } from '../locations/location.type';
+import { UserLib } from '../user/user.lib';
 import { IUser } from '../user/user.type';
 import { Messages } from './../../constants';
-import { UserLib } from '../user/user.lib';
 import { CabinLib } from './cabin.lib';
-import { LocationLib } from '../locations/location.lib';
 import { ICabin, ICabinRequest } from './cabin.type';
-import { ILocationRequest } from '../locations/location.type';
 
 /**
  * Cabin Controller
@@ -94,7 +94,6 @@ export class CabinController extends BaseController {
 
         }
     }
-
 
     public async fetchSpecificCabin(req: Request, res: Response): Promise<void> {
         try {

@@ -14,15 +14,15 @@ export const cabinSchema: Schema = new Schema({
     },
     booking_start_time: {
         type: Date,
-        default: null
+        default: null,
     },
     booking_end_time: {
         type: Date,
-        default: null
+        default: null,
     },
     duration: {
         type: Number,
-        default: null
+        default: null,
     },
     capacity: {
         type: String,
@@ -31,10 +31,10 @@ export const cabinSchema: Schema = new Schema({
     name: {
         type: String,
         required: true,
-        trim: true
-    }
+        trim: true,
+    },
 
-}, { timestamps: true });
+},                                            { timestamps: true });
 
 cabinSchema.plugin(mongoosePaginate);
 interface IUserModel<T extends Document> extends PaginateModel<T> { }

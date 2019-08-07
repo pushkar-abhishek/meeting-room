@@ -5,9 +5,9 @@ import { ILocation } from './location.type';
 export const locationSchema: Schema = new Schema({
     name: {
         type: String,
-        default: null
+        default: null,
     },
-}, { timestamps: true });
+},                                               { timestamps: true });
 
 locationSchema.plugin(mongoosePaginate);
 interface ILocationModel<T extends Document> extends PaginateModel<T> { }

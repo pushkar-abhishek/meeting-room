@@ -1,10 +1,9 @@
 import * as express from 'express';
 
 import { AuthController } from './modules/auth/auth.controller';
+import { CabinController } from './modules/cabins/cabin.controller';
 import { LocationController } from './modules/locations/location.controller';
 import { UserController } from './modules/user/user.controller';
-import { CabinController } from './modules/cabins/cabin.controller';
-
 
 export function registerRoutes(app: express.Application): void {
   new UserController().register(app);

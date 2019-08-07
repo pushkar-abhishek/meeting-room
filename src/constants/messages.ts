@@ -10,6 +10,6 @@ export class Messages {
   public static readonly EMAIL_ALREADY_EXIST: string = 'Email already exist.';
   public static readonly USER_DEACTIVATED: string = 'Your account has been deactivated. Please, contact Admin for assistance';
   public static readonly NOT_VERIFIED: string = 'Please verify your account through the verification link sent to your Registered mail';
-  public static readonly AURTHORIZATION_ERROR = 'Not authorized to perform the operation';
-  public static readonly LOCATION_ERROR = 'No such location registered';
+  public static readonly AURTHORIZATION_ERROR: string = 'Not authorized to perform the operation';
+  public static readonly LOCATION_ERROR: string = 'No such location registered';
 }
