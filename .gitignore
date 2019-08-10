@@ -6,8 +6,6 @@ log/
 .env
 .env.*
 !.env.example
-coverage
 tmp/    
-build/
 
 combined.log
