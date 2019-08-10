@@ -39,7 +39,6 @@ export class UserController extends BaseController {
     //   authHelper.validation,
     //   this.updateInfo,
     // );
-
   }
 
   public register(app: Application): void {
@@ -134,5 +133,4 @@ export class UserController extends BaseController {
       ResponseHandler.JSONERROR(req, res, 'verifiedEmail');
     }
   }
-
 }

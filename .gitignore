@@ -1,4 +1,5 @@
 dist/
+.vscode/
 node_modules/
 *.log
 logs/
@@ -7,3 +8,6 @@ logs/
 !.env.example
 coverage
 tmp/    
+build/
+
+combined.log

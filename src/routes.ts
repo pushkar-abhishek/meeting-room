@@ -10,5 +10,4 @@ export function registerRoutes(app: express.Application): void {
   new AuthController().register(app);
   new LocationController().register(app);
   new CabinController().register(app);
-
 }

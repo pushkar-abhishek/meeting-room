@@ -16,6 +16,11 @@
     "tslint:fix": "tslint --project tsconfig.json --fix",
     "precommit": "lint-staged"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run tslint:fix && npm run format && pretty-quick --staged"
+    }
+  },
   "lint-staged": {
     "{src,test}/**/*.ts*": [
       "prettier --write",
