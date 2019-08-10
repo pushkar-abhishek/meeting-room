@@ -7,5 +7,6 @@ log/
 .env.*
 !.env.example
 tmp/    
-
+Procfile
 combined.log
+node_modules
