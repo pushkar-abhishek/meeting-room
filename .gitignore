@@ -2,7 +2,7 @@ dist/
 .vscode/
 node_modules/
 *.log
-logs/
+log/
 .env
 .env.*
 !.env.example

@@ -22,7 +22,7 @@ export class CabinLib {
   }
 
   public async getCabin(id: string): Promise<ICabin> {
-    return cabinModel.findOne({ _id: id }, { location: { $exists: true } });
+    return cabinModel.findOne({ _id: id });
   }
 
   public async getAllCabins(
