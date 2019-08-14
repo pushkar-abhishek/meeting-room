@@ -30,7 +30,7 @@ export class LocationController extends BaseController {
         req.body.loggedinUserId,
       );
       if (userDetails.role === 'super_admin' || userDetails.role === 'admin') {
-        const result: any = await location.saveLocation(data);
+        const result: ILocation = await location.saveLocation(data);
         res.locals.data = result;
         res.locals.message = 'Location Added';
         res.locals.info = {

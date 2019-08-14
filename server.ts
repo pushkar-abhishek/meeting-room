@@ -29,7 +29,7 @@ function serverError(error: NodeJS.ErrnoException): void {
 }
 
 function serverListening(): void {
-  logger.info(`Server listening on : ${PORT} and swagger /docs`);
+  logger.info(`Server listening on → ${PORT} `);
 }
 
 process.on('unhandledRejection', (reason: Error) => {

@@ -8,12 +8,16 @@ export const locationSchema: Schema = new Schema(
       type: String,
       default: null,
     },
+    city: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true },
 );
 
 locationSchema.plugin(mongoosePaginate);
-interface ILocationModel<T extends Document> extends PaginateModel<T> {}
+interface ILocationModel<T extends Document> extends PaginateModel<T> { }
 
 export const locationModel: ILocationModel<ILocation> = model<ILocation>(
   'Location',

@@ -1,22 +1,16 @@
-import { PaginateResult } from 'mongoose';
+import { PaginateResult, Types } from 'mongoose';
 // import { Messages, populate } from '../../constants';
-import { cabinModel } from './cabin.model';
+import { cabinModel } from '../cabins/cabin.model';
 import { ICabin, ICabinRequest } from './cabin.type';
+// import { bookingModel } from '../bookings/booking.model';
+import { IBooking, IBookingRequest } from '../bookings/booking.type';
 
-// tslint:disable-next-line: completed-docs
+
 export class CabinLib {
   public async addCabin(data: ICabinRequest): Promise<ICabin> {
-    try {
-      return cabinModel.create(data);
-    } catch (err) {
-      return Promise.reject({
-        success: false,
-        error: `${err}`,
-      });
-    }
+    return cabinModel.create(data);
   }
 
-  // tslint:disable-next-line: no-reserved-keywords
   public async deleteCabin(cabinId: string): Promise<ICabin> {
     return cabinModel.findOneAndDelete({ _id: cabinId });
   }
@@ -30,5 +24,35 @@ export class CabinLib {
     options: any,
   ): Promise<PaginateResult<ICabin>> {
     return cabinModel.paginate(filters, options);
+  }
+
+  public async checkAvailable(location: string, start: string, end: string): Promise<IBooking[]> {
+
+    return cabinModel.aggregate([
+      { $match: { location: Types.ObjectId(location) } },
+      {
+        $lookup: {
+          from: 'bookings',
+          localField: '_id',
+          foreignField: 'cabin',
+          as: 'bookingInfo'
+        }
+      }
+      // {
+      //   $match: {
+
+      //   }
+      //     { $gte: start, $lt: end }
+      // }
+
+      // { $unwind: '$bookingInfo' },
+      // {
+      //   $project: {
+      //     _id: '$_id',
+      //     capacity: '$cabin.name',
+      //     booking_date: '$booking'
+      //   }
+      // }
+    ]);
   }
 }

@@ -3,17 +3,10 @@ import { PaginateResult } from 'mongoose';
 import { locationModel } from './location.model';
 import { ILocation, ILocationRequest } from './location.type';
 
-// tslint:disable-next-line: completed-docs
 export class LocationLib {
   public async saveLocation(data: ILocationRequest): Promise<ILocation> {
-    try {
-      return locationModel.create(data);
-    } catch (err) {
-      return Promise.reject({
-        success: false,
-        error: `${err}`,
-      });
-    }
+    return locationModel.create(data);
+
   }
 
   public async deletelocation(locationId: string): Promise<ILocation> {

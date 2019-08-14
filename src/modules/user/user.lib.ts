@@ -53,33 +53,25 @@ export class UserLib {
     userData: IUser,
     verificationToken: string,
   ): Promise<IUser> {
-    try {
-      const currentUser: IUser = await this.checkUserExistsForEmailOrUsername(
-        userData.email,
-      );
-      if (currentUser !== null) {
-        const errorMessage: string =
-          currentUser.email === userData.email
-            ? Messages.USERNAME_ALREADY_EXIST
-            : Messages.EMAIL_ALREADY_EXIST;
+    const currentUser: IUser = await this.checkUserExistsForEmailOrUsername(
+      userData.email,
+    );
+    if (currentUser !== null) {
+      const errorMessage: string =
+        currentUser.email === userData.email
+          ? Messages.USERNAME_ALREADY_EXIST
+          : Messages.EMAIL_ALREADY_EXIST;
 
-        return Promise.reject({
-          success: false,
-          error: errorMessage,
-        });
-      } else {
-        userData.password = await this.generateHash(userData.password);
-        const userObj: IUser = new userModel(userData);
-        userObj.verification_token = verificationToken;
-
-        return userObj.save();
-      }
-    } catch (err) {
       return Promise.reject({
         success: false,
-        error: `${err}`,
+        error: errorMessage,
       });
     }
+    userData.password = await this.generateHash(userData.password);
+    const userObj: IUser = new userModel(userData);
+    userObj.verification_token = verificationToken;
+
+    return userObj.save();
   }
 
   public async getUserByEmail(email: string): Promise<IUser> {
