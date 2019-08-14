@@ -1,11 +1,9 @@
 import { PaginateResult, Types } from 'mongoose';
-// import { Messages, populate } from '../../constants';
+import { IBooking, IBookingRequest } from '../bookings/booking.type';
 import { cabinModel } from '../cabins/cabin.model';
 import { ICabin, ICabinRequest } from './cabin.type';
-// import { bookingModel } from '../bookings/booking.model';
-import { IBooking, IBookingRequest } from '../bookings/booking.type';
 
-
+// tslint:disable-next-line:completed-docs
 export class CabinLib {
   public async addCabin(data: ICabinRequest): Promise<ICabin> {
     return cabinModel.create(data);
@@ -35,9 +33,9 @@ export class CabinLib {
           from: 'bookings',
           localField: '_id',
           foreignField: 'cabin',
-          as: 'bookingInfo'
-        }
-      }
+          as: 'bookingInfo',
+        },
+      },
       // {
       //   $match: {
 

@@ -2,6 +2,7 @@ import { PaginateResult, Types } from 'mongoose';
 import { bookingModel } from './booking.model';
 import { IBooking, IBookingRequest } from './booking.type';
 
+// tslint:disable-next-line:completed-docs
 export class BookingLib {
     public async addBooking(data: IBookingRequest): Promise<IBooking> {
         return bookingModel.create(data);
@@ -19,8 +20,8 @@ export class BookingLib {
         return bookingModel.findOne({});
     }
 
-    public async cancelBooking(booking_id: string): Promise<IBooking> {
-        return bookingModel.update({ _id: booking_id }, { $set: { isCancelled: true } });
+    public async cancelBooking(booking: string): Promise<IBooking> {
+        return bookingModel.update({ _id: booking }, { $set: { isCancelled: true } });
 
     }
 

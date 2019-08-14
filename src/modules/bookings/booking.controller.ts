@@ -1,16 +1,14 @@
 import { Application, Request, Response } from 'express';
+import moment = require('moment');
+import mtz = require('moment-timezone');
 import { AuthHelper, ResponseHandler } from '../../helpers';
 import { BaseController } from '../BaseController';
+import { CabinLib } from '../cabins/cabin.lib';
 import { UserLib } from '../user/user.lib';
 import { IUser } from '../user/user.type';
 import { Messages } from './../../constants';
 import { BookingLib } from './booking.lib';
 import { IBooking, IBookingRequest } from './booking.type';
-import { CabinLib } from '../cabins/cabin.lib';
-import moment = require('moment');
-import mtz = require('moment-timezone');
-
-
 
 /**
  * Booking Controller
@@ -39,8 +37,8 @@ export class BookingController extends BaseController {
             // data.start_time = mtz.tz(moment(req.body.start_date).startOf('day').toDate(), req.body.timezone).utc().format();
             // data.end_time = mtz.tz(moment(req.body.end_time).startOf('day').toDate(), req.body.timezone).utc().format();
 
-            const date = data.booking_date ? data.booking_date : Date.now();
-            const cabinId = req.params.cabin_id;
+            const date: string = data.booking_date ? data.booking_date : Date.now();
+            const cabinId: string = req.params.cabin_id;
             data.booked_by = userDetails._id;
             data.cabin = cabinId;
             data.location = req.params.location_id;
@@ -62,24 +60,10 @@ export class BookingController extends BaseController {
 
     public async seeAvailable(req: Request, res: Response): Promise<void> {
         try {
-            const data: IBookingRequest = req.body;
-            const user: UserLib = new UserLib();
             const cabin: CabinLib = new CabinLib();
-
-            const booking: BookingLib = new BookingLib();
-            const userDetails: IUser = await user.getUserById(
-                req.body.loggedinUserId,
-            );
-
-            const date = new Date()
-
-            const location = req.params.location_id;
-            // const start: number = new Date(data.start_time).getTime();
-            const start: string = mtz.tz(moment(req.body.start_time).startOf('day').toDate(), req.body.timezone).utc().format()
-            // const end: number = new Date(data.end_time).getTime();
-
-            const end: string = mtz.tz(moment(req.body.end_time).endOf('day').toDate(), req.body.timezone).utc().format()
-
+            const location: string = req.params.location_id;
+            const start: string = mtz.tz(moment(req.body.start_time).startOf('day').toDate(), req.body.timezone).utc().format();
+            const end: string = mtz.tz(moment(req.body.end_time).endOf('day').toDate(), req.body.timezone).utc().format();
 
             const result: IBooking[] = await cabin.checkAvailable(location, start, end);
 
@@ -90,18 +74,16 @@ export class BookingController extends BaseController {
             };
             ResponseHandler.JSONSUCCESS(req, res);
 
-
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'Booking-Error');
         }
     }
 
-
     /**
      * API to cancel the booked meeting
-     * @param req 
-     * @param res 
+     * @param req
+     * @param res
      */
     public async cancelBooking(req: Request, res: Response): Promise<void> {
         try {
@@ -120,7 +102,6 @@ export class BookingController extends BaseController {
             ResponseHandler.JSONERROR(req, res, 'Booking-Cancellation-Error');
         }
     }
-
 
     /**
      * Initialize the API registration for booking module

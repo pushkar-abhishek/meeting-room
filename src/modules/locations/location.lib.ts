@@ -1,8 +1,8 @@
 import { PaginateResult } from 'mongoose';
-// import { Messages, populate } from '../../constants';
 import { locationModel } from './location.model';
 import { ILocation, ILocationRequest } from './location.type';
 
+// tslint:disable-next-line:completed-docs
 export class LocationLib {
   public async saveLocation(data: ILocationRequest): Promise<ILocation> {
     return locationModel.create(data);
