@@ -66,14 +66,15 @@ bookingSchema.path('start_time').validate(function (value: Date): any {
   const newLocal: any = this;
   // Extract the Room Id from the query object
   const cabinId: any = newLocal.cabin_id;
-  const newbookingstart: any = value.getTime();
-  const newbookingend: any = newLocal.end_time.getTime();
+  const newbookingstart: any = new Date(value).getTime();
+  const newbookingend: any = new Date(newLocal.end_time).getTime();
+
 
   const clashesWithExisting: any =
     (existingbookingstart: number,
-     existingbookingend: number,
-     newbookingstart: number,
-     newbookingend: number): boolean => {
+      existingbookingend: number,
+      newbookingstart: number,
+      newbookingend: number): boolean => {
       if (newbookingstart >= existingbookingstart && newbookingstart < existingbookingend ||
         existingbookingstart >= newbookingstart && existingbookingstart < newbookingend) {
 
@@ -82,7 +83,6 @@ bookingSchema.path('start_time').validate(function (value: Date): any {
           ${moment(existingbookingstart).format('HH:mm Z')} to ${moment(existingbookingend).format('HH:mm on LL Z')}`,
         );
       }
-
       return false;
     };
 
@@ -94,6 +94,7 @@ bookingSchema.path('start_time').validate(function (value: Date): any {
 
         // Convert existing booking Date objects into number values
         const existingbookingstart: number = new Date(booking.start_time).getTime();
+
         const existingbookingend: number = new Date(booking.end_time).getTime();
 
         // Check whether there is a clash between the new booking and the existing booking
@@ -105,4 +106,4 @@ bookingSchema.path('start_time').validate(function (value: Date): any {
         );
       });
     });
-},                                        `{REASON}`);
+}, `{REASON}`);

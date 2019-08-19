@@ -9,6 +9,7 @@ import { IUser } from '../user/user.type';
 import { Messages } from './../../constants';
 import { BookingLib } from './booking.lib';
 import { IBooking, IBookingRequest } from './booking.type';
+import { ICabin } from 'modules/cabins/cabin.type';
 
 /**
  * Booking Controller
@@ -29,6 +30,7 @@ export class BookingController extends BaseController {
             const data: IBookingRequest = req.body;
             const user: UserLib = new UserLib();
             const booking: BookingLib = new BookingLib();
+            const cabin: CabinLib = new CabinLib();
             const userDetails: IUser = await user.getUserById(
                 req.body.loggedinUserId,
             );
@@ -39,12 +41,12 @@ export class BookingController extends BaseController {
 
             const date: string = data.booking_date ? data.booking_date : Date.now();
             const cabinId: string = req.params.cabin_id;
-            data.booked_by = userDetails._id;
             data.cabin = cabinId;
             data.location = req.params.location_id;
             data.occupied_by = userDetails._id;
             data.booking_date = date;
             const result: IBooking = await booking.addBooking(data);
+            const arrayPush: ICabin = await cabin.arrayPush(cabinId, result._id)
 
             res.locals.data = result;
             res.locals.message = 'Booked';
@@ -65,7 +67,7 @@ export class BookingController extends BaseController {
             const start: string = mtz.tz(moment(req.body.start_time).startOf('day').toDate(), req.body.timezone).utc().format();
             const end: string = mtz.tz(moment(req.body.end_time).endOf('day').toDate(), req.body.timezone).utc().format();
 
-            const result: IBooking[] = await cabin.checkAvailable(location, start, end);
+            const result: ICabin[] = await cabin.checkAvailable(location, start, end);
 
             res.locals.data = result;
             res.locals.message = 'Booked';
@@ -88,7 +90,13 @@ export class BookingController extends BaseController {
     public async cancelBooking(req: Request, res: Response): Promise<void> {
         try {
             const booking: BookingLib = new BookingLib();
+            const cabin: CabinLib = new CabinLib();
+
             const booking_id: string = req.params.booking_id;
+
+            const bookedCabin: IBooking = await booking.myBooking(booking_id);
+
+            const pullBookingFromCabin: ICabin = await cabin.pullBooking(bookedCabin.cabin, booking_id)
             const result: IBooking = await booking.cancelBooking(booking_id);
 
             res.locals.data = result;

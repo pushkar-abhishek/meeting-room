@@ -25,6 +25,10 @@ export class BookingLib {
 
     }
 
+    public async myBooking(booking: string): Promise<IBooking> {
+        return bookingModel.findById(booking);
+    }
+
     public async getAll(
         filters: any,
         options: any,

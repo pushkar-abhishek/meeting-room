@@ -77,6 +77,8 @@ export class AuthController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
       await mailer.sendEmail(options);
     } catch (err) {
+      console.log("``````````````````", err);
+
       res.locals.data = err;
       ResponseHandler.JSONERROR(req, res, 'addUser');
     }
@@ -124,6 +126,7 @@ export class AuthController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
       await mailer.sendEmail(options);
     } catch (err) {
+
       res.locals.data = err;
       ResponseHandler.JSONERROR(req, res, 'forgotPassword');
     }
