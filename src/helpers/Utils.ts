@@ -1,9 +1,8 @@
 import * as crypto from 'crypto';
 import { PaginateResult } from 'mongoose';
-import { IPagination } from '../abstractions/ApiResponses';
 import * as speakeasy from 'speakeasy';
+import { IPagination } from '../abstractions/ApiResponses';
 // import * as Nexmo from 'nexmo';
-
 
 // const nexmo: any = new Nexmo({
 //   apiKey: "7f80f707",
@@ -38,7 +37,7 @@ export class Utils {
       secret: speakeasy.generateSecret({ length: 20 }).base32,
       encoding: 'base32',
       digits: 4,
-      step: 240
+      step: 240,
     });
   }
 }

@@ -227,6 +227,7 @@ paths:
           schema:
             type: string
       security: []
+  
   /api/users/{userId}:
     get:
       tags:
@@ -239,7 +240,7 @@ paths:
       parameters:
       - name: "userId"
         in: "path"
-        description: "_id of category to return"
+        description: "_id of user to return"
         required: true
         type: "string"
       responses:
@@ -252,7 +253,7 @@ paths:
     get:
       tags:
         - User
-      summary: Users
+      summary: Get all users
       description: Users
       operationId: users
       produces:
@@ -312,6 +313,55 @@ paths:
           schema:
             type: string
       security: []
+  /api/auth/forgot-password:
+    post:
+      tags:
+        - User
+      summary: User forgots its pasword
+      description: Forgot Password
+      operationId: forgotPassword
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: the "User" model
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+    /api/auth/reset-password:
+    post:
+      tags:
+        - User
+      summary: Reset the Password using verfication code
+      description: Reset Password
+      operationId: resetPassword
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          description: the "User" model
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: string
+      security: []
+  
   /api/carts:
     post:
       tags:
@@ -406,23 +456,6 @@ paths:
       security: 
       - authorization: []
 definitions:
-  Product:
-    description: Model for Product
-    required:
-      - brand
-    properties:
-      brand:
-        type: string
-        x-example: Motorola
-      category_id:
-        type: string
-        x-example: 5d2d9bf1b3af78720a1f0a54
-      name:
-        type: string
-        x-example: Moto G
-      price:
-        type: string
-        x-example: '8999'
   User:
     description: Model for User
     required:
@@ -430,7 +463,7 @@ definitions:
     properties:
       confirm_password:
         type: string
-        x-example: jitendra123
+        x-example: pushkar123
       email:
         type: string
         x-example: pushkar.abhishek@neosofttech.com

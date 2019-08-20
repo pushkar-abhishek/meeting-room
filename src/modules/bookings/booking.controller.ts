@@ -1,4 +1,5 @@
 import { Application, Request, Response } from 'express';
+import { ICabin } from 'modules/cabins/cabin.type';
 import moment = require('moment');
 import mtz = require('moment-timezone');
 import { AuthHelper, ResponseHandler } from '../../helpers';
@@ -9,7 +10,6 @@ import { IUser } from '../user/user.type';
 import { Messages } from './../../constants';
 import { BookingLib } from './booking.lib';
 import { IBooking, IBookingRequest } from './booking.type';
-import { ICabin } from 'modules/cabins/cabin.type';
 
 /**
  * Booking Controller
@@ -46,7 +46,7 @@ export class BookingController extends BaseController {
             data.occupied_by = userDetails._id;
             data.booking_date = date;
             const result: IBooking = await booking.addBooking(data);
-            const arrayPush: ICabin = await cabin.arrayPush(cabinId, result._id)
+            const arrayPush: ICabin = await cabin.arrayPush(cabinId, result._id);
 
             res.locals.data = result;
             res.locals.message = 'Booked';
@@ -96,7 +96,7 @@ export class BookingController extends BaseController {
 
             const bookedCabin: IBooking = await booking.myBooking(booking_id);
 
-            const pullBookingFromCabin: ICabin = await cabin.pullBooking(bookedCabin.cabin, booking_id)
+            const pullBookingFromCabin: ICabin = await cabin.pullBooking(bookedCabin.cabin, booking_id);
             const result: IBooking = await booking.cancelBooking(booking_id);
 
             res.locals.data = result;

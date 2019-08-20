@@ -58,8 +58,6 @@ export const bookingModel: IUserModel<IBooking> = model<IBooking>(
   bookingSchema,
 );
 
-/*eslint no-shadow: "error"*/
-/*eslint-env es6*/
 
 // Validation to ensure a room cannot be double-booked
 bookingSchema.path('start_time').validate(function (value: Date): any {
@@ -68,7 +66,6 @@ bookingSchema.path('start_time').validate(function (value: Date): any {
   const cabinId: any = newLocal.cabin_id;
   const newbookingstart: any = new Date(value).getTime();
   const newbookingend: any = new Date(newLocal.end_time).getTime();
-
 
   const clashesWithExisting: any =
     (existingbookingstart: number,
@@ -83,6 +80,7 @@ bookingSchema.path('start_time').validate(function (value: Date): any {
           ${moment(existingbookingstart).format('HH:mm Z')} to ${moment(existingbookingend).format('HH:mm on LL Z')}`,
         );
       }
+
       return false;
     };
 

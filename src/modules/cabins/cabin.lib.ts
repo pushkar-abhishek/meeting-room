@@ -1,8 +1,8 @@
+import { isClassBody } from 'babel-types';
 import { PaginateResult, Types } from 'mongoose';
 import { IBooking, IBookingRequest } from '../bookings/booking.type';
 import { cabinModel } from '../cabins/cabin.model';
 import { ICabin, ICabinRequest } from './cabin.type';
-import { isClassBody } from 'babel-types';
 
 export class CabinLib {
   public async addCabin(data: ICabinRequest): Promise<ICabin> {
@@ -27,7 +27,6 @@ export class CabinLib {
   public async checkAvailable(location: string, start: string, end: string): Promise<ICabin[]> {
     // return cabinModel.find({ location: Types.ObjectId(location) }).populate('booking');
 
-
     return cabinModel.aggregate([
       { $match: { location: Types.ObjectId(location) } },
       { $unwind: { path: '$booking', preserveNullAndEmptyArrays: true } },
@@ -36,16 +35,16 @@ export class CabinLib {
           from: 'bookings',
           localField: 'booking',
           foreignField: '_id',
-          as: 'bookingInfo'
-        }
+          as: 'bookingInfo',
+        },
       },
       {
         $lookup: {
           from: 'users',
           localField: 'bookingInfo.occupied_by',
           foreignField: '_id',
-          as: 'bookedUser'
-        }
+          as: 'bookedUser',
+        },
       },
       { $unwind: { path: '$bookedUser', preserveNullAndEmptyArrays: true } },
       {
@@ -53,25 +52,25 @@ export class CabinLib {
           from: 'bookings',
           localField: 'booking',
           foreignField: '_id',
-          as: 'bookingInfo'
-        }
+          as: 'bookingInfo',
+        },
       }, {
         $project: {
           _id: 1,
           bookedUser: 1,
           bookingInfo: 1,
-          cabin_name: "$name",
-          capacity: "$capacity"
-        }
-      }
+          cabin_name: '$name',
+          capacity: '$capacity',
+        },
+      },
     ]);
   }
 
   public async arrayPush(id: string, bookId: string): Promise<ICabin> {
-    return cabinModel.findOneAndUpdate({ _id: id }, { $push: { bookings: bookId } }, { new: true })
+    return cabinModel.findOneAndUpdate({ _id: id }, { $push: { bookings: bookId } }, { new: true });
   }
 
   public async pullBooking(cabin: string, booking_id: string): Promise<ICabin> {
-    return cabinModel.findByIdAndUpdate(cabin, { $pull: { bookings: booking_id } })
+    return cabinModel.findByIdAndUpdate(cabin, { $pull: { bookings: booking_id } });
   }
 }
