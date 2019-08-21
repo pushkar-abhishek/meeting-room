@@ -58,7 +58,6 @@ export const bookingModel: IUserModel<IBooking> = model<IBooking>(
   bookingSchema,
 );
 
-
 // Validation to ensure a room cannot be double-booked
 bookingSchema.path('start_time').validate(function (value: Date): any {
   const newLocal: any = this;
@@ -67,41 +66,47 @@ bookingSchema.path('start_time').validate(function (value: Date): any {
   const newbookingstart: any = new Date(value).getTime();
   const newbookingend: any = new Date(newLocal.end_time).getTime();
 
-  const clashesWithExisting: any =
-    (existingbookingstart: number,
-      existingbookingend: number,
-      newbookingstart: number,
-      newbookingend: number): boolean => {
-      if (newbookingstart >= existingbookingstart && newbookingstart < existingbookingend ||
-        existingbookingstart >= newbookingstart && existingbookingstart < newbookingend) {
+  const clashesWithExisting: any = (
+    existingbookingstart: number,
+    existingbookingend: number,
+    newbookingstart: number,
+    newbookingend: number,
+  ): boolean => {
+    if (
+      (newbookingstart >= existingbookingstart &&
+        newbookingstart < existingbookingend) ||
+      (existingbookingstart >= newbookingstart &&
+        existingbookingstart < newbookingend)
+    ) {
+      throw new Error(
+        `Booking could not be saved. There is a clash with an existing booking from
+          ${moment(existingbookingstart).format('HH:mm Z')} to ${moment(
+          existingbookingend,
+        ).format('HH:mm on LL Z')}`,
+      );
+    }
 
-        throw new Error(
-          `Booking could not be saved. There is a clash with an existing booking from
-          ${moment(existingbookingstart).format('HH:mm Z')} to ${moment(existingbookingend).format('HH:mm on LL Z')}`,
-        );
-      }
-
-      return false;
-    };
+    return false;
+  };
 
   // Locate the cabin document containing the bookings
-  return bookingModel.find({ cabin_id: cabinId })
-    .then(rooms => {
-      // Loop through each existing booking and return false if there is a clash
-      return rooms.every(booking => {
+  return bookingModel.find({ cabin_id: cabinId }).then(rooms => {
+    // Loop through each existing booking and return false if there is a clash
+    return rooms.every(booking => {
+      // Convert existing booking Date objects into number values
+      const existingbookingstart: number = new Date(
+        booking.start_time,
+      ).getTime();
 
-        // Convert existing booking Date objects into number values
-        const existingbookingstart: number = new Date(booking.start_time).getTime();
+      const existingbookingend: number = new Date(booking.end_time).getTime();
 
-        const existingbookingend: number = new Date(booking.end_time).getTime();
-
-        // Check whether there is a clash between the new booking and the existing booking
-        return !clashesWithExisting(
-          existingbookingstart,
-          existingbookingend,
-          newbookingstart,
-          newbookingend,
-        );
-      });
-    });
+      // Check whether there is a clash between the new booking and the existing booking
+      return !clashesWithExisting(
+        existingbookingstart,
+        existingbookingend,
+        newbookingstart,
+        newbookingend,
+      )
+    })
+  })
 }, `{REASON}`);

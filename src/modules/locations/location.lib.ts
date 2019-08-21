@@ -6,7 +6,6 @@ import { ILocation, ILocationRequest } from './location.type';
 export class LocationLib {
   public async saveLocation(data: ILocationRequest): Promise<ILocation> {
     return locationModel.create(data);
-
   }
 
   public async deletelocation(locationId: string): Promise<ILocation> {

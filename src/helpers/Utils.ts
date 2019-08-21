@@ -32,7 +32,7 @@ export class Utils {
     return crypto.randomBytes(16);
   }
 
-  public async  generateOtp(): Promise<any> {
+  public async generateOtp(): Promise<any> {
     return speakeasy.totp({
       secret: speakeasy.generateSecret({ length: 20 }).base32,
       encoding: 'base32',

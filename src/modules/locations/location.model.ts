@@ -17,7 +17,7 @@ export const locationSchema: Schema = new Schema(
 );
 
 locationSchema.plugin(mongoosePaginate);
-interface ILocationModel<T extends Document> extends PaginateModel<T> { }
+interface ILocationModel<T extends Document> extends PaginateModel<T> {}
 
 export const locationModel: ILocationModel<ILocation> = model<ILocation>(
   'Location',

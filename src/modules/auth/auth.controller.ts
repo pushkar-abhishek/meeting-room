@@ -42,6 +42,7 @@ export class AuthController extends BaseController {
       userRules.resetPassword,
       this.resetPassword,
     );
+    this.router.post('/resend-code', this.resendVerificationCode)
   }
 
   /**
@@ -55,9 +56,7 @@ export class AuthController extends BaseController {
       const mailer: EmailServer = new EmailServer();
       const userData: IUser = req.body;
       // tslint:disable-next-line: await-promise
-      const verificationToken: string = await crypto
-        .randomBytes(20)
-        .toString('hex');
+      const verificationToken: string = changeCase.lowerCase(randomstring.generate(4));
       const userResult: IUser = await user.addUser(userData, verificationToken);
 
       // const verifyAccountURL: string = await this.generateVerifyAccountUrl(userResult._id);
@@ -106,13 +105,17 @@ export class AuthController extends BaseController {
 
       const email: string = req.body.email ? req.body.email : null;
       const userData: IUser = await user.getUserByEmail(email);
-      const verificationCode: any = changeCase.lowerCase(
-        randomstring.generate(6),
-      );
+      if (!userData) {
+        throw new Error('Wrong Email Provided');
+      }
+      const verificationCode: any = changeCase.lowerCase(randomstring.generate(4));
+      const resetPasswordExpires: any = Date.now() + 3600000; // 1 hour from now
 
       await user.updateUser(userData._id, {
         account_recovery_code: verificationCode,
+        resetPasswordExpires: resetPasswordExpires
       });
+
       const options: any = {
         subject: 'Forgot Password',
         templateName: 'password-reset',
@@ -124,7 +127,6 @@ export class AuthController extends BaseController {
       ResponseHandler.JSONSUCCESS(req, res);
       await mailer.sendEmail(options);
     } catch (err) {
-
       res.locals.data = err;
       ResponseHandler.JSONERROR(req, res, 'forgotPassword');
     }
@@ -144,11 +146,67 @@ export class AuthController extends BaseController {
           'You might not have yet requested for the Reset Password',
         );
       } else {
-        userData.password = req.body.password.trim();
-        userData.account_recovery_code = '';
-        const userResult: IUser = await user.saveUser(userData);
-        res.locals.data = userResult;
-        ResponseHandler.JSONSUCCESS(req, res);
+        const isExpired: IUser = await user.checkForExpiry(userData._id);
+        if (!isExpired) {
+          throw new Error(
+            'Password Link Expired'
+          );
+        } else {
+          userData.password = req.body.password.trim();
+          userData.account_recovery_code = '';
+          const userResult: IUser = await user.saveUser(userData);
+          res.locals.data = userResult;
+          ResponseHandler.JSONSUCCESS(req, res);
+        }
+      }
+    } catch (err) {
+      res.locals.data = err;
+      ResponseHandler.JSONERROR(req, res, 'resetPassword');
+    }
+  }
+
+  public async resendVerificationCode(req: Request, res: Response): Promise<void> {
+    try {
+      const user: UserLib = new UserLib();
+      const mailer: EmailServer = new EmailServer();
+      const userData: IUser = await user.getUserByEmail(req.body.email)
+      if (!userData) {
+        throw new Error(
+          'User not registered',
+        );
+      } else {
+        if (!userData.verification_token == null) {
+          const verificationCode: any = changeCase.lowerCase(randomstring.generate(4));
+          const resetPasswordExpires: any = Date.now() + 3600000; // 1 hour from now
+
+          await user.updateUser(userData._id, {
+            account_recovery_code: verificationCode,
+          });
+          const options: any = {
+            subject: 'Forgot Password',
+            templateName: 'password-reset',
+            to: userData.email,
+            replace: {
+              code: verificationCode,
+              resetPasswordExpires: resetPasswordExpires
+            },
+          };
+          ResponseHandler.JSONSUCCESS(req, res);
+          await mailer.sendEmail(options);
+
+        } else {
+          const options: any = {
+            subject: 'Forgot Password',
+            templateName: 'password-reset',
+            to: userData.email,
+            replace: {
+              code: userData.verification_token,
+              resetPasswordExpires: Date.now() + 3600000
+            },
+          };
+          ResponseHandler.JSONSUCCESS(req, res);
+          await mailer.sendEmail(options);
+        }
       }
     } catch (err) {
       res.locals.data = err;

@@ -7,7 +7,10 @@ import * as swaggerUi from 'swagger-ui-express';
 import * as yaml from 'yamljs';
 import { registerRoutes } from './src/routes';
 
-const swagOptions: any = { explorer: false };
+const swagOptions: any = {
+  explorer: false,
+  customCss: '.swagger-ui .topbar { display: none }'
+};
 const swaggerDocument: any = yaml.load('./swagger/swagger.yaml');
 
 if (process.env.NODE_ENV === 'production') {
@@ -35,19 +38,6 @@ export class App {
   private async middleware(): Promise<void> {
     // cors
     this.express.use(cors());
-    // this.express.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-    //     const allowedOrigins: string[] = ['http://127.0.0.1:4200', 'http://10.0.29.42:4200', 'http://localhost:4200'];
-    //     const origin: any = req.headers.origin;
-    //     if (allowedOrigins.indexOf(origin) > -1) {
-    //          res.setHeader('Access-Control-Allow-Origin', origin);
-    //     }
-
-    //     res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    //     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    //     res.header('Access-Control-Allow-Credentials', 'true');
-    //     next();
-    // });
-
     this.express.use(bodyParser.json());
     this.express.use(bodyParser.urlencoded({ extended: true }));
     this.express.use(

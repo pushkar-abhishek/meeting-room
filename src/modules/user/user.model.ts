@@ -52,6 +52,10 @@ export const userSchema: Schema = new Schema(
       type: String,
       default: null,
     },
+    resetPasswordExpires: {
+      type: String,
+      default: null
+    },
     is_verified: {
       type: Boolean,
       default: false,
@@ -61,6 +65,6 @@ export const userSchema: Schema = new Schema(
 );
 
 userSchema.plugin(mongoosePaginate);
-interface IUserModel<T extends Document> extends PaginateModel<T> {}
+interface IUserModel<T extends Document> extends PaginateModel<T> { }
 
 export const userModel: IUserModel<IUser> = model<IUser>('User', userSchema);

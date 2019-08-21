@@ -1,10 +1,10 @@
 import { Application, Request, Response } from 'express';
-import { ICabin } from 'modules/cabins/cabin.type';
 import moment = require('moment');
 import mtz = require('moment-timezone');
 import { AuthHelper, ResponseHandler } from '../../helpers';
 import { BaseController } from '../BaseController';
 import { CabinLib } from '../cabins/cabin.lib';
+import { ICabin } from '../cabins/cabin.type';
 import { UserLib } from '../user/user.lib';
 import { IUser } from '../user/user.type';
 import { Messages } from './../../constants';
@@ -64,8 +64,24 @@ export class BookingController extends BaseController {
         try {
             const cabin: CabinLib = new CabinLib();
             const location: string = req.params.location_id;
-            const start: string = mtz.tz(moment(req.body.start_time).startOf('day').toDate(), req.body.timezone).utc().format();
-            const end: string = mtz.tz(moment(req.body.end_time).endOf('day').toDate(), req.body.timezone).utc().format();
+            const start: string = mtz
+                .tz(
+                    moment(req.body.start_time)
+                        .startOf('day')
+                        .toDate(),
+                    req.body.timezone,
+                )
+                .utc()
+                .format();
+            const end: string = mtz
+                .tz(
+                    moment(req.body.end_time)
+                        .endOf('day')
+                        .toDate(),
+                    req.body.timezone,
+                )
+                .utc()
+                .format();
 
             const result: ICabin[] = await cabin.checkAvailable(location, start, end);
 
@@ -75,7 +91,6 @@ export class BookingController extends BaseController {
                 functionName: 'Booking',
             };
             ResponseHandler.JSONSUCCESS(req, res);
-
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'Booking-Error');
@@ -96,7 +111,10 @@ export class BookingController extends BaseController {
 
             const bookedCabin: IBooking = await booking.myBooking(booking_id);
 
-            const pullBookingFromCabin: ICabin = await cabin.pullBooking(bookedCabin.cabin, booking_id);
+            const pullBookingFromCabin: ICabin = await cabin.pullBooking(
+                bookedCabin.cabin,
+                booking_id,
+            );
             const result: IBooking = await booking.cancelBooking(booking_id);
 
             res.locals.data = result;
@@ -117,10 +135,12 @@ export class BookingController extends BaseController {
      */
     private init(): void {
         const authHelper: AuthHelper = new AuthHelper();
-        this.router.post('/:location_id/:cabin_id', authHelper.guard, this.bookACabin);
+        this.router.post(
+            '/:location_id/:cabin_id',
+            authHelper.guard,
+            this.bookACabin,
+        );
         this.router.post('/:location_id', authHelper.guard, this.seeAvailable);
         this.router.get('/:booking_id', authHelper.guard, this.cancelBooking);
-
     }
-
 }

@@ -31,14 +31,6 @@ export class UserController extends BaseController {
     );
     this.router.delete('/:id', this.deleteUser);
     this.router.get('/verify/:token', this.verifiedEmail);
-
-    // this.router.put(
-    //   '/info/:id',
-    //   authHelper.guard,
-    //   userRules.updateInfo,
-    //   authHelper.validation,
-    //   this.updateInfo,
-    // );
   }
 
   public register(app: Application): void {
@@ -47,7 +39,6 @@ export class UserController extends BaseController {
 
   public async getUsers(req: Request, res: Response): Promise<void> {
     try {
-      // req.body.loggedinUserId ---> user objectID
       const utils: Utils = new Utils();
       const filters: any = { role: { $ne: 'super_admin' } };
 
@@ -115,7 +106,7 @@ export class UserController extends BaseController {
   public async verifiedEmail(req: Request, res: Response): Promise<void> {
     try {
       const params: IUserRequest = req.params;
-      const token: string = req.params.token ? req.params.token : null;
+      const token: string = params.token ? params.token : null;
       const user: UserLib = new UserLib();
       const userData: IUser = await user.getUserByResetPassToken(token);
       if (userData !== null) {

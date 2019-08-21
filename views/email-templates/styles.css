@@ -56,8 +56,9 @@ table {
     HEADER, FOOTER, MAIN
 ------------------------------------- */
 .main {
-  background: #fff;
-  border-top:20px solid #fff200;
+  background: ghostwhite;
+  border-top:20px solid red;
+  border-left:20px solid orange;
   width: 100%; }
 
 .wrapper {
@@ -82,7 +83,7 @@ table {
 ------------------------------------- */
 h1,
 h2,
-h3,
+h3{font-size: 19px; color: #464646;}
 h4 {
   color: #000000;
   font-family: sans-serif;

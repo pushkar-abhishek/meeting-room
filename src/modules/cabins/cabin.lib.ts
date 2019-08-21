@@ -1,6 +1,4 @@
-import { isClassBody } from 'babel-types';
 import { PaginateResult, Types } from 'mongoose';
-import { IBooking, IBookingRequest } from '../bookings/booking.type';
 import { cabinModel } from '../cabins/cabin.model';
 import { ICabin, ICabinRequest } from './cabin.type';
 
@@ -24,7 +22,11 @@ export class CabinLib {
     return cabinModel.paginate(filters, options);
   }
 
-  public async checkAvailable(location: string, start: string, end: string): Promise<ICabin[]> {
+  public async checkAvailable(
+    location: string,
+    start: string,
+    end: string,
+  ): Promise<ICabin[]> {
     // return cabinModel.find({ location: Types.ObjectId(location) }).populate('booking');
 
     return cabinModel.aggregate([
@@ -54,7 +56,8 @@ export class CabinLib {
           foreignField: '_id',
           as: 'bookingInfo',
         },
-      }, {
+      },
+      {
         $project: {
           _id: 1,
           bookedUser: 1,
@@ -67,10 +70,16 @@ export class CabinLib {
   }
 
   public async arrayPush(id: string, bookId: string): Promise<ICabin> {
-    return cabinModel.findOneAndUpdate({ _id: id }, { $push: { bookings: bookId } }, { new: true });
+    return cabinModel.findOneAndUpdate(
+      { _id: id },
+      { $push: { bookings: bookId } },
+      { new: true },
+    );
   }
 
-  public async pullBooking(cabin: string, booking_id: string): Promise<ICabin> {
-    return cabinModel.findByIdAndUpdate(cabin, { $pull: { bookings: booking_id } });
+  public async pullBooking(cabin: string, bookingid: string): Promise<ICabin> {
+    return cabinModel.findByIdAndUpdate(cabin, {
+      $pull: { bookings: bookingid },
+    });
   }
 }

@@ -12,6 +12,7 @@ export interface IUser extends Document {
   is_verified: boolean;
   verification_token?: any;
   account_recovery_code?: any;
+  resetPasswordExpires?: any;
 }
 
 export interface IUserRequest {
@@ -25,4 +26,5 @@ export interface IUserRequest {
   department?: string;
   token?: any;
   account_recovery_code?: any;
+  resetPasswordExpires?: any;
 }

@@ -89,6 +89,10 @@ export class UserLib {
     return userModel.findOne({ account_recovery_code: code }, '-password');
   }
 
+  public async checkForExpiry(user: string): Promise<IUser> {
+    return userModel.findOne({ _id: user, resetPasswordExpires: { $gt: Date.now() } }, '-password');
+  }
+
   /**
    * updateUser
    * @param userId
@@ -99,6 +103,8 @@ export class UserLib {
     userData: IUserRequest,
   ): Promise<any> {
     const user: IUser = await userModel.findById(userId);
+    console.log({ userData, user });
+
     user.set(userData);
 
     return user.save();
