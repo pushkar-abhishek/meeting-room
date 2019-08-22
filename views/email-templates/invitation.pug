@@ -2,8 +2,9 @@ extends email-layout
 
 block content
   h2 Meeting Scheduled
-  p Greetings!, 
-  p You have a <strong>#{purpose}</strong> scheduled at <strong>#{startTime}</strong>, for <strong>#{duration} mins</strong> in <strong>#{roomName}</strong>.
+  p Greetings! 
+  p You are having <strong>#{purpose}</strong> scheduled at <strong>#{startTime}</strong>, for <strong>#{duration} mins</strong> in <strong>#{roomName}</strong>.
+  p Organized By: <strong>#{organizorFirstName} #{organizorLastName}</strong>
   br
   p Please make yourself available on time.
   br

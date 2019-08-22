@@ -21,14 +21,20 @@ export class BookingLib {
   }
 
   public async cancelBooking(booking: string): Promise<IBooking> {
-    return bookingModel.update(
-      { _id: booking },
-      { $set: { isCancelled: true } },
+    return bookingModel.findByIdAndUpdate(booking,
+      { $set: { isCancelled: true } }, { new: true }
     );
   }
 
   public async myBooking(booking: string): Promise<IBooking> {
     return bookingModel.findById(booking);
+  }
+
+  public async updateMembers(id: string, members: any): Promise<void> {
+    return bookingModel.update(
+      { _id: id },
+      { $set: { meeting_members: members } }
+    );
   }
 
   public async getAll(

@@ -80,6 +80,6 @@ export class CabinLib {
   public async pullBooking(cabin: string, bookingid: string): Promise<ICabin> {
     return cabinModel.findByIdAndUpdate(cabin, {
       $pull: { bookings: bookingid },
-    });
+    }, { new: true });
   }
 }

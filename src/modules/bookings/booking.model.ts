@@ -46,6 +46,9 @@ export const bookingSchema: Schema = new Schema(
       type: Boolean,
       default: false,
     },
+    meeting_members: {
+      type: Array
+    }
   },
   { timestamps: true },
 );

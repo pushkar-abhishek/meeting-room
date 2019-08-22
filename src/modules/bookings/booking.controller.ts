@@ -7,7 +7,7 @@ import { CabinLib } from '../cabins/cabin.lib';
 import { ICabin } from '../cabins/cabin.type';
 import { UserLib } from '../user/user.lib';
 import { IUser } from '../user/user.type';
-import { Messages } from './../../constants';
+import * as changeCase from 'change-case';
 import { BookingLib } from './booking.lib';
 import { IBooking, IBookingRequest } from './booking.type';
 
@@ -54,9 +54,13 @@ export class BookingController extends BaseController {
             ResponseHandler.JSONSUCCESS(req, res);
 
             mailingArray.push(userDetails.email)
-            data.mails.forEach(function (item: any) {
-                mailingArray.push(item)
-            });
+            if (data.mails && data.mails.length > 0) {
+                data.mails.forEach(function (item: any) {
+                    mailingArray.push(item)
+                });
+            }
+            await booking.updateMembers(result._id, mailingArray)
+
             mailingArray.forEach(async function (i) {
                 const options: any = {
                     subject: 'Meeting Invitation',
@@ -64,9 +68,11 @@ export class BookingController extends BaseController {
                     to: i,
                     replace: {
                         roomName: bookingCabin.name,
+                        organizorFirstName: changeCase.titleCase(userDetails.first_name),
+                        organizorLastName: changeCase.titleCase(userDetails.last_name),
                         purpose: result.purpose,
                         duration: result.duration,
-                        startTime: moment.utc(result.start_time).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                        startTime: moment.utc(result.start_time).format("dddd, MMMM Do YYYY, h:mm A"),
                     }
                 };
 
@@ -124,15 +130,12 @@ export class BookingController extends BaseController {
         try {
             const booking: BookingLib = new BookingLib();
             const cabin: CabinLib = new CabinLib();
+            const mailer: EmailServer = new EmailServer();
 
             const booking_id: string = req.params.booking_id;
-
             const bookedCabin: IBooking = await booking.myBooking(booking_id);
 
-            const pullBookingFromCabin: ICabin = await cabin.pullBooking(
-                bookedCabin.cabin,
-                booking_id,
-            );
+            const cabinDetails: ICabin = await cabin.pullBooking(bookedCabin.cabin, booking_id);
             const result: IBooking = await booking.cancelBooking(booking_id);
 
             res.locals.data = result;
@@ -141,6 +144,25 @@ export class BookingController extends BaseController {
                 functionName: 'cancelBooking',
             };
             ResponseHandler.JSONSUCCESS(req, res);
+
+            if (bookedCabin.meeting_members && bookedCabin.meeting_members.length > 0) {
+                bookedCabin.meeting_members.forEach(async (item) => {
+                    const options: any = {
+                        subject: 'Meeting Cancellation',
+                        templateName: 'meeting-cancel',
+                        to: item,
+                        replace: {
+                            roomName: cabinDetails.name,
+                            purpose: bookedCabin.purpose,
+                            duration: bookedCabin.duration,
+                            startTime: moment.utc(result.start_time).format("dddd, MMMM Do YYYY, h:mm A"),
+                        }
+                    };
+                    await mailer.sendEmail(options);
+
+                })
+            }
+
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'Booking-Cancellation-Error');

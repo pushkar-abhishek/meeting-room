@@ -10,6 +10,7 @@ export interface IBooking extends Document {
   booking_date?: any;
   purpose?: string;
   duration?: any;
+  meeting_members?: []
 }
 
 export interface IBookingRequest {
@@ -23,4 +24,5 @@ export interface IBookingRequest {
   location?: any;
   occupied_by: string;
   mails?: [];
+  meeting_members?: []
 }
