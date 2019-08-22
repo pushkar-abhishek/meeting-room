@@ -54,7 +54,7 @@ export const userSchema: Schema = new Schema(
     },
     resetPasswordExpires: {
       type: String,
-      default: null
+      default: null,
     },
     is_verified: {
       type: Boolean,

@@ -6,7 +6,7 @@ export const cabinSchema: Schema = new Schema(
   {
     location: {
       type: Schema.Types.ObjectId,
-      ref: 'location',
+      ref: 'Location',
       default: null,
     },
     capacity: {
@@ -21,7 +21,7 @@ export const cabinSchema: Schema = new Schema(
     bookings: [
       {
         type: Schema.Types.ObjectId,
-        ref: 'booking',
+        ref: 'Booking',
         default: null,
       },
     ],
@@ -30,7 +30,7 @@ export const cabinSchema: Schema = new Schema(
 );
 
 cabinSchema.plugin(mongoosePaginate);
-interface IUserModel<T extends Document> extends PaginateModel<T> {}
+interface IUserModel<T extends Document> extends PaginateModel<T> { }
 
 export const cabinModel: IUserModel<ICabin> = model<ICabin>(
   'cabin',

@@ -42,7 +42,7 @@ export class AuthController extends BaseController {
       userRules.resetPassword,
       this.resetPassword,
     );
-    this.router.post('/resend-code', this.resendVerificationCode)
+    this.router.post('/resend-code', this.resendVerificationCode);
   }
 
   /**
@@ -113,7 +113,7 @@ export class AuthController extends BaseController {
 
       await user.updateUser(userData._id, {
         account_recovery_code: verificationCode,
-        resetPasswordExpires: resetPasswordExpires
+        resetPasswordExpires: resetPasswordExpires,
       });
 
       const options: any = {
@@ -149,7 +149,7 @@ export class AuthController extends BaseController {
         const isExpired: IUser = await user.checkForExpiry(userData._id);
         if (!isExpired) {
           throw new Error(
-            'Password Link Expired'
+            'Password Link Expired',
           );
         } else {
           userData.password = req.body.password.trim();
@@ -169,7 +169,7 @@ export class AuthController extends BaseController {
     try {
       const user: UserLib = new UserLib();
       const mailer: EmailServer = new EmailServer();
-      const userData: IUser = await user.getUserByEmail(req.body.email)
+      const userData: IUser = await user.getUserByEmail(req.body.email);
       if (!userData) {
         throw new Error(
           'User not registered',
@@ -188,7 +188,7 @@ export class AuthController extends BaseController {
             to: userData.email,
             replace: {
               code: verificationCode,
-              resetPasswordExpires: resetPasswordExpires
+              resetPasswordExpires: resetPasswordExpires,
             },
           };
           ResponseHandler.JSONSUCCESS(req, res);
@@ -201,7 +201,7 @@ export class AuthController extends BaseController {
             to: userData.email,
             replace: {
               code: userData.verification_token,
-              resetPasswordExpires: Date.now() + 3600000
+              resetPasswordExpires: Date.now() + 3600000,
             },
           };
           ResponseHandler.JSONSUCCESS(req, res);

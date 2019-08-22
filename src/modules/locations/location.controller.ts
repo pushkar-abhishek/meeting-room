@@ -73,20 +73,10 @@ export class LocationController extends BaseController {
 
   public async fetchLocations(req: Request, res: Response): Promise<void> {
     try {
-      const utils: Utils = new Utils();
       const location: LocationLib = new LocationLib();
-      const filters: any = {};
 
-      const options: any = {
-        page: req.query.page ? Number(req.query.page) : 1,
-        limit: req.query.limit ? Number(req.query.limit) : 5,
-      };
-      const locations: PaginateResult<ILocation> = await location.getAll(
-        filters,
-        options,
-      );
-      res.locals.data = locations.docs;
-      res.locals.pagination = utils.getPaginateResponse(locations);
+      const locations: any = await location.getAllCabins();
+      res.locals.data = locations;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {
       res.locals.data = err;

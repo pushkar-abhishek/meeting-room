@@ -1,7 +1,7 @@
 import { Application, Request, Response } from 'express';
 import moment = require('moment');
 import mtz = require('moment-timezone');
-import { AuthHelper, ResponseHandler } from '../../helpers';
+import { AuthHelper, ResponseHandler, EmailServer } from '../../helpers';
 import { BaseController } from '../BaseController';
 import { CabinLib } from '../cabins/cabin.lib';
 import { ICabin } from '../cabins/cabin.type';
@@ -31,13 +31,11 @@ export class BookingController extends BaseController {
             const user: UserLib = new UserLib();
             const booking: BookingLib = new BookingLib();
             const cabin: CabinLib = new CabinLib();
+            const mailer: EmailServer = new EmailServer();
             const userDetails: IUser = await user.getUserById(
                 req.body.loggedinUserId,
             );
-            // Process of booking a Cabin
-
-            // data.start_time = mtz.tz(moment(req.body.start_date).startOf('day').toDate(), req.body.timezone).utc().format();
-            // data.end_time = mtz.tz(moment(req.body.end_time).startOf('day').toDate(), req.body.timezone).utc().format();
+            const mailingArray: string[] = []
 
             const date: string = data.booking_date ? data.booking_date : Date.now();
             const cabinId: string = req.params.cabin_id;
@@ -46,14 +44,34 @@ export class BookingController extends BaseController {
             data.occupied_by = userDetails._id;
             data.booking_date = date;
             const result: IBooking = await booking.addBooking(data);
-            const arrayPush: ICabin = await cabin.arrayPush(cabinId, result._id);
-
+            const bookingCabin: ICabin = await cabin.getCabin(cabinId);
+            await cabin.arrayPush(cabinId, result._id);
             res.locals.data = result;
             res.locals.message = 'Booked';
             res.locals.info = {
                 functionName: 'bookACabin',
             };
             ResponseHandler.JSONSUCCESS(req, res);
+
+            mailingArray.push(userDetails.email)
+            data.mails.forEach(function (item: any) {
+                mailingArray.push(item)
+            });
+            mailingArray.forEach(async function (i) {
+                const options: any = {
+                    subject: 'Meeting Invitation',
+                    templateName: 'invitation',
+                    to: i,
+                    replace: {
+                        roomName: bookingCabin.name,
+                        purpose: result.purpose,
+                        duration: result.duration,
+                        startTime: moment.utc(result.start_time).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                    }
+                };
+
+                await mailer.sendEmail(options);
+            })
         } catch (err) {
             res.locals.data = err;
             ResponseHandler.JSONERROR(req, res, 'Booking-Error');

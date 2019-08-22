@@ -22,4 +22,15 @@ export class LocationLib {
   ): Promise<PaginateResult<ILocation>> {
     return locationModel.paginate(filters, options);
   }
+
+  public async getAllCabins(): Promise<any> {
+    return locationModel.aggregate([
+      { $project: { city: 1, name: 1 } },
+      {
+        $group: { _id: '$city', toalCabins: { $sum: 1 }, cabins: { $push: { area: "$name", _id: '$_id' } } }
+      },
+    ]);
+  }
+
 }
+

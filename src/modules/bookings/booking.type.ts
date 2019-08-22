@@ -8,6 +8,8 @@ export interface IBooking extends Document {
   location: any;
   occupied_by: string;
   booking_date?: any;
+  purpose?: string;
+  duration?: any;
 }
 
 export interface IBookingRequest {
@@ -20,4 +22,5 @@ export interface IBookingRequest {
   cabin?: any;
   location?: any;
   occupied_by: string;
+  mails?: [];
 }

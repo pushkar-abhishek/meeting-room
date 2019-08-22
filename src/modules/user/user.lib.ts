@@ -103,8 +103,6 @@ export class UserLib {
     userData: IUserRequest,
   ): Promise<any> {
     const user: IUser = await userModel.findById(userId);
-    console.log({ userData, user });
-
     user.set(userData);
 
     return user.save();

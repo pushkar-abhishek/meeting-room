@@ -12,7 +12,7 @@ export class CabinLib {
   }
 
   public async getCabin(id: string): Promise<ICabin> {
-    return cabinModel.findOne({ _id: id });
+    return cabinModel.findOne({ _id: id }).populate('bookings').populate('location', ['name', 'city']);
   }
 
   public async getAllCabins(
