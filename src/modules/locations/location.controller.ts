@@ -1,11 +1,12 @@
 import { Application, Request, Response } from 'express';
-import { PaginateResult } from 'mongoose';
 import { AuthHelper, ResponseHandler, Utils } from '../../helpers';
 import { BaseController } from '../BaseController';
 import { UserLib } from '../user/user.lib';
 import { IUser } from '../user/user.type';
 import { Messages } from './../../constants';
 import { LocationLib } from './location.lib';
+import { ICabin, ICabinRequest } from '../cabins/cabin.type';
+import { CabinLib } from '../cabins/cabin.lib';
 import { ILocation, ILocationRequest } from './location.type';
 
 /**
@@ -89,10 +90,11 @@ export class LocationController extends BaseController {
     res: Response,
   ): Promise<void> {
     try {
-      const location: LocationLib = new LocationLib();
-      const locationDetails: ILocationRequest = await location.getLocationById(
+      const cabin: CabinLib = new CabinLib();
+      const locationDetails: ICabin = await cabin.getCabinsFromLocation(
         req.params.location_id,
       );
+
       res.locals.data = locationDetails;
       ResponseHandler.JSONSUCCESS(req, res);
     } catch (err) {

@@ -27,8 +27,6 @@ export class CabinLib {
     start: string,
     end: string,
   ): Promise<ICabin[]> {
-    // return cabinModel.find({ location: Types.ObjectId(location) }).populate('booking');
-
     return cabinModel.aggregate([
       { $match: { location: Types.ObjectId(location) } },
       { $unwind: { path: '$booking', preserveNullAndEmptyArrays: true } },
@@ -81,5 +79,22 @@ export class CabinLib {
     return cabinModel.findByIdAndUpdate(cabin, {
       $pull: { bookings: bookingid },
     }, { new: true });
+  }
+
+  public async getCabinsFromLocation(location: string): Promise<any> {
+    return cabinModel.aggregate([
+      { $match: { location: Types.ObjectId(location) } },
+
+
+      { $project: { city: 1, name: 1, capacity: 1, bookings: 1 } },
+      {
+        $lookup: {
+          from: 'bookings',
+          localField: 'bookings',
+          foreignField: '_id',
+          as: 'bookings',
+        }
+      }
+    ])
   }
 }
